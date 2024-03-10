@@ -11,8 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('services', function (Blueprint $table) {
+        Schema::create('services', static function (Blueprint $table) {
             $table->id();
+            $table->string('logo_path')->nullable();
+            $table->string('title');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

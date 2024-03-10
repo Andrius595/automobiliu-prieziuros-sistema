@@ -10,8 +10,18 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@vueuse/nuxt": "^10.9.0",
+    "jwt-decode": "^4.0.0",
     "nuxt": "^3.10.3",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vuetify-sonner": "^0.3.14"
+  },
+  "devDependencies": {
+    "@nuxtjs/i18n": "^8.1.1",
+    "@vite-pwa/nuxt": "^0.6.0",
+    "nuxt-auth-sanctum": "^0.1.2",
+    "sass": "^1.71.1",
+    "vuetify-nuxt-module": "^0.12.0"
   }
 }

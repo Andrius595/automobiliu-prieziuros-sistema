@@ -11,8 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('cars', function (Blueprint $table) {
+        Schema::create('cars', static function (Blueprint $table) {
             $table->id();
+            $table->foreignId('owner_id')->nullable()->constrained('users');
+            $table->string('make');
+            $table->string('model');
+            $table->string('vin')->unique();
+            $table->integer('year_of_manufacture')->nullable();
+            $table->string('color')->nullable();
+            $table->boolean('mileage_type');
             $table->timestamps();
         });
     }

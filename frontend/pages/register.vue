@@ -1,0 +1,110 @@
+<template>
+  <v-container class="d-flex flex-column justify-center align-center flex-grow-1">
+    <h1 class="mb-4 site-name text-h2 text-primary">CarHorizontal</h1>
+    <v-form v-model="valid" style="width: 50%" @submit.prevent="register">
+      <div>
+        <v-row>
+          <v-col
+              cols="12"
+              md="6"
+          >
+            <v-text-field
+                v-model="form.first_name"
+                :label="$t('first_name')"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+          <v-col
+              cols="12"
+              md="6"
+          >
+            <v-text-field
+                v-model="form.last_name"
+                :label="$t('last_name')"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+          <v-col
+              cols="12"
+          >
+            <v-text-field
+                v-model="form.email"
+                :label="$t('email')"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+          <v-col
+              cols="12"
+              md="6"
+          >
+            <v-text-field
+                v-model="form.password"
+                type="password"
+                :counter="10"
+                :label="$t('password')"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+          <v-col
+              md="6"
+              cols="12"
+          >
+            <v-text-field
+                v-model="form.password_confirmation"
+                type="password"
+                :counter="10"
+                :label="$t('password_confirmation')"
+                hide-details
+                required
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <v-btn type="submit" class="mt-4" color="primary">Login</v-btn>
+      </div>
+    </v-form>
+  </v-container>
+</template>
+
+<script setup lang="ts">
+const valid = ref(false)
+const email = ref('')
+const password = ref('')
+
+const form = ref({
+  first_name: '',
+  last_name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
+})
+
+
+definePageMeta({
+  layout: 'guest',
+  middleware: ['guest'],
+})
+
+async function register() {
+  if (valid.value) {
+    const response = await useFetch('/api/auth/register', {
+      method: 'POST',
+      body: form.value,
+    })
+
+    if (response.id) {
+      await navigateTo('/login')
+    }
+  }
+}
+</script>
+
+<style scoped>
+.site-name {
+  font-family: Afacad, Helvetica, sans-serif;
+  font-weight: 500
+}
+</style>

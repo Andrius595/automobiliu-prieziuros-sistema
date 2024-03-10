@@ -2,20 +2,58 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\CreateNewUser;
+use App\Config\PermissionsConfig;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Nette\NotImplementedException;
 
 class AuthController extends Controller
 {
-    public function login()
+    public function login(Request $request): JsonResponse
     {
-        throw new NotImplementedException();
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $token = auth()->attempt([
+            'email' => $request->input('email'),
+            'password' => $request->get('password')
+        ]);
+
+        if (!$token) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return response()->json(['token' => $token]);
     }
 
-    public function register()
+    public function refresh()
     {
-        throw new NotImplementedException();
+        $token = auth()->refresh();
+
+        if (!$token) {
+            return response()->json(['error' => 'Refresh token already expired'], 401);
+        }
+
+        return response()->json([
+            'token' => $token,
+        ]);
     }
+
+    public function register(Request $request, CreateNewUser $createNewUser): JsonResponse
+    {
+        $user = $createNewUser->create($request->all());
+
+        $user->assignRole(PermissionsConfig::CLIENT_ROLE);
+
+        event(new Registered($user));
+
+        return response()->json($user);
+    }
+
 
     public function forgotPassword()
     {
@@ -27,8 +65,10 @@ class AuthController extends Controller
         throw new NotImplementedException();
     }
 
-    public function logout()
+    public function logout(): JsonResponse
     {
-        throw new NotImplementedException();
+        auth()->logout();
+
+        return response()->json();
     }
 }
