@@ -51,7 +51,7 @@
     </v-data-table-server>
     <DeleteCarDialog :delete-path="deletePath" :car-id="carId" :visible="deleteDialogVisible" @close="deleteDialogVisible = false" @confirm="carDeleted" />
     <EditCarDialog :edit-path="editPath" :car-id="carId" :visible="editDialogVisible" @close="editDialogVisible = false" @confirm="carEdited" />
-    <CreateCarDialog :create-path="createPath" :visible="createDialogVisible" registration @close="createDialogVisible = false" @confirm="carCreated" />
+    <RegisterCarDialog :visible="createDialogVisible" @close="createDialogVisible = false" @confirm="carCreated" />
   </div>
 </template>
 
@@ -60,7 +60,7 @@ import {type PaginatedResponse} from "@/types/Responses";
 import {type Car} from "@/types/Car";
 import DeleteCarDialog from "~/components/Car/DeleteCarDialog.vue";
 import EditCarDialog from "~/components/Car/EditCarDialog.vue";
-import CreateCarDialog from "~/components/Car/CreateCarDialog.vue";
+import RegisterCarDialog from "~/components/Car/RegisterCarDialog.vue";
 
 const props = defineProps({
   userId: {
@@ -87,10 +87,8 @@ const carId = ref<number|undefined>(undefined)
 
 const deletePath = computed(() => '/users/'+props.userId+'/cars')
 const editPath = computed(() => '/users/'+props.userId+'/cars/')
-const createPath = computed(() => '/users/'+props.userId+'/cars')
 
 async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerPage: number, sortBy: { key: string, order: 'asc'|'desc'}[] }) {
-  console.log('sortBy', sortBy)
   loading.value = true
   const query = {
     perPage: itemsPerPage,
@@ -100,7 +98,7 @@ async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerP
   }
 
   const { data }  = await backFetch<PaginatedResponse<Car>>('/user/my-cars', {
-    method: 'GET',
+    method: 'get',
     query,
     headers: {'Accept': 'application/json'},
   })

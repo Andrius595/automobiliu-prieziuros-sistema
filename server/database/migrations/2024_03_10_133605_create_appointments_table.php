@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('appointments', function (Blueprint $table) {
+        Schema::create('appointments', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('service_id')->constrained()->cascadeOnDelete();
             $table->foreignId('car_id')->constrained()->cascadeOnDelete();
+            $table->integer('current_mileage');
+            $table->boolean('mileage_type');
             $table->text('description')->nullable();
             $table->timestamp('confirmed_at')->nullable();
             $table->timestamp('completed_at')->nullable();

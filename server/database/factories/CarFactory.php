@@ -27,7 +27,9 @@ class CarFactory extends Factory
             'make' => $this->faker->randomElement($makes),
             'model' => $this->faker->randomElement($models),
             'vin' => $this->faker->unique()->bothify('??????????????????'),
-            'year_of_manufacture' => $this->faker->numberBetween(1990, 2023),
+            'plate_no' => $this->faker->unique()->bothify('???###'),
+            'year_of_manufacture' => $this->faker->numberBetween(1990, 2024),
+            'color' => $this->faker->safeColorName,
             'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
         ];
     }

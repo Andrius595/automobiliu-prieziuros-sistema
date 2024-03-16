@@ -21,8 +21,8 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-            v-model="make"
-            label="Make"
+            v-model="form.make"
+            :label="$t('car.make')"
             required
             hide-details
             :disabled="carWasFound"
@@ -30,12 +30,41 @@
       </v-col>
       <v-col cols="12" md="6">
         <v-text-field
-            v-model="model"
-            label="Model"
+            v-model="form.model"
+            :label="$t('car.model')"
             required
             hide-details
             :disabled="carWasFound"
         ></v-text-field>
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+            v-model="form.plate_no"
+            :label="$t('car.plate_no')"
+            required
+            hide-details
+            :disabled="carWasFound"
+        ></v-text-field>
+
+
+      </v-col>
+      <v-col cols="12" md="6">
+        <v-text-field
+            v-model="form.current_mileage"
+            :label="$t('car.current_mileage')"
+            required
+            hide-details
+        >
+          <template #append-inner>
+            <v-btn-toggle
+                v-model="form.mileage_type"
+                mandatory
+            >
+              <v-btn>KM</v-btn>
+              <v-btn>M</v-btn>
+            </v-btn-toggle>
+          </template>
+        </v-text-field>
       </v-col>
     </v-row>
     <v-btn color="primary" class="mt-4" @click="createAppointment">Create appointment</v-btn>
@@ -46,24 +75,33 @@
 </template>
 
 <script setup lang="ts">
-import {GetCarByVinResponse} from "~/types/Responses";
+import {type GetCarByVinResponse} from "~/types/Responses";
 import {errorToast, successToast} from "~/utils/toast";
 import {definePageMeta} from "#imports";
+import type {Appointment} from "~/types/Appointment";
 
 const auth = useAuth()
 
 const user = await auth.getUser()
 
 const vin = ref('')
-const make = ref('')
-const model = ref('')
+const form = ref({
+  make: '',
+  model: '',
+  plate_no: '',
+  current_mileage: 0,
+  mileage_type: 0,
+})
 const checkPerformed = ref<boolean>(false)
 const carWasFound = ref<boolean>(false)
 const carId = ref<number|null>(null)
 
 function resetSearch() {
-  make.value = ''
-  model.value = ''
+  form.value.make = ''
+  form.value.model = ''
+  form.value.plate_no = ''
+  form.value.current_mileage = 0
+  form.value.mileage_type = 0
   carWasFound.value = false
   carId.value = null
 }
@@ -78,19 +116,21 @@ async function checkVin() {
   if (data.value && 'id' in data.value) {
     carWasFound.value = true
     carId.value = data.value.id
-    make.value = data.value.make
-    model.value = data.value.model
+    form.value.make = data.value.make
+    form.value.model = data.value.model
+    form.value.plate_no = data.value.plate_no as string
+    form.value.mileage_type = data.value.mileage_type
+    form.value.current_mileage = data.value.current_mileage
   }
 }
 
 async function createAppointment() {
-  const { data, error } = await backFetch('/services/'+user.service_id+'/appointments', {
+  const { data, error } = await backFetch<Appointment>('/service/appointments/create-appointment', {
     method: 'post',
     body: {
       car_id: carId.value,
-      make: make.value,
-      model: model.value,
       vin: vin.value,
+      ...form.value,
     }
   })
 
@@ -100,7 +140,9 @@ async function createAppointment() {
     return
   }
 
-  successToast('Appointment created successfully!')
+  if (data.value && 'id' in data.value) {
+    navigateTo('/services/appointments/' + data.value.id)
+  }
 }
 
 definePageMeta({

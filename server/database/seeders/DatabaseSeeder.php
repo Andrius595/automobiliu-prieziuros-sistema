@@ -86,6 +86,7 @@ class DatabaseSeeder extends Seeder
             'make' => 'Volvo',
             'model' => 'V60',
             'vin' => '123',
+            'plate_no' => 'ABC123',
             'owner_id' => $user->id,
             'year_of_manufacture' => 2011,
             'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
@@ -94,6 +95,8 @@ class DatabaseSeeder extends Seeder
         $appointment = Appointment::create([
             'service_id' => $service->id,
             'car_id' => $car->id,
+            'current_mileage' => 190000,
+            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
             'confirmed_at' => now(),
             'completed_at' => now(),
             'created_at' => now()->subMonth(),
@@ -101,21 +104,20 @@ class DatabaseSeeder extends Seeder
 
         Record::create([
             'appointment_id' => $appointment->id,
-            'current_mileage' => 190000,
-            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
             'short_description' => 'Oil change',
         ]);
 
         $appointment2 = Appointment::create([
             'service_id' => $service->id,
             'car_id' => $car->id,
+            'current_mileage' => 200000,
+            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
             'confirmed_at' => now(),
             'completed_at' => now(),
         ]);
         Record::create([
             'appointment_id' => $appointment2->id,
-            'current_mileage' => 200000,
-            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
+
             'short_description' => 'Flywheel change',
         ]);
 

@@ -1,12 +1,27 @@
 <template>
   <v-layout class="rounded rounded-md">
     <ClientOnly>
-      <VSonner position="top-right" style="min-width: 344px!important;" />
+      <v-snackbar
+          :model-value="showSnackbar"
+          absolute
+          location="top right"
+      >
+        {{ $t(snackbarMessage) }}
+        <template v-slot:actions>
+          <v-btn
+              color="red"
+              variant="text"
+              @click="hideSnackbar"
+          >
+            {{ $t('common.close') }}
+          </v-btn>
+        </template>
+      </v-snackbar>
     </ClientOnly>
     <v-navigation-drawer v-model="drawer" border="primary thick opacity-1">
       <template v-slot:prepend>
         <div class="bg-primary d-flex align-center justify-center" style="height:64px">
-          <h1>CarHorizontal</h1>
+          <h1>{{ $t('common.aps') }}</h1>
         </div>
         <v-divider />
       </template>
@@ -14,7 +29,7 @@
       <template v-slot:append>
         <div class="pa-2">
           <v-btn block color="primary" @click="auth.logout()">
-            Logout
+            {{ $t('auth.logout') }}
           </v-btn>
         </div>
       </template>
@@ -27,15 +42,20 @@
       <slot />
     </v-main>
     <v-footer color="primary-darken-1" app>
-      <div class="flex-grow-1 text-center white--text footer-site-name">&copy; {{ new Date().getFullYear() }} CarHorizontal</div>
+      <div class="flex-grow-1 text-center white--text footer-site-name">&copy; {{ new Date().getFullYear() }} {{ $t('common.aps') }}</div>
     </v-footer>
   </v-layout>
 </template>
 <script setup lang="ts">
 import NavigationList from '@/components/NavigationList.vue';
-import { VSonner } from 'vuetify-sonner'
-
+import { useSnackbar } from '@/composables/useSnackbar';
 import {useAuth} from "~/composables/useAuth";
+
+const showSnackbar = computed(() => useSnackbar().isVisible())
+const snackbarMessage = computed(() => useSnackbar().getMessage())
+function hideSnackbar() {
+  useSnackbar().hide()
+}
 
 const auth = useAuth()
 

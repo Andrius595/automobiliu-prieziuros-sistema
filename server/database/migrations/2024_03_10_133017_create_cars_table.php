@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('owner_id')->nullable()->constrained('users');
             $table->string('make');
+            $table->string('plate_no', 10);
             $table->string('model');
             $table->string('vin')->unique();
             $table->integer('year_of_manufacture')->nullable();

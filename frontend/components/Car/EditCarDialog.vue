@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
 import {errorToast, successToast} from "~/utils/toast";
+import { type Car } from '@/types/Car'
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
@@ -41,8 +42,8 @@ function closeDialog() {
 }
 
 async function loadCar(carId: number) {
-  const { data } = await backFetch<Car>(props.editPath + props.carId, {
-    method: 'GET',
+  const { data } = await backFetch<Car>('/cars/'+props.carId, {
+    method: 'get',
     headers: {'Accept': 'application/json'},
   })
   if (data.value) {
@@ -52,7 +53,7 @@ async function loadCar(carId: number) {
 
 async function confirmEdit() {
   const { data, error } = await backFetch('/cars/' + props.carId, {
-    method: 'PUT',
+    method: 'put',
     body: car.value,
     headers: {'Accept': 'application/json'},
   })
@@ -78,13 +79,33 @@ async function confirmEdit() {
       <v-card-text>
         <v-container>
           <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field label="Make" v-model="car.make" :error-messages="errors.make" />
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
               <v-text-field label="Model" v-model="car.model" :error-messages="errors.make" />
             </v-col>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="6">
+              <v-text-field :label="$t('car.plate_no')" v-model="car.plate_no" :error-messages="errors.plate_no" />
+            </v-col>
+            <v-col
+                class="py-2"
+                cols="12"
+                md="6"
+            >
+              <p>{{ $t('car.mileage_type')}}</p>
+
+              <v-btn-toggle
+                  v-model="car.mileage_type"
+                  mandatory
+                  shaped
+              >
+                <v-btn>KM</v-btn>
+
+                <v-btn>M</v-btn>
+              </v-btn-toggle>
+            </v-col>
+            <v-col cols="12" md="6">
               <v-text-field label="Year" v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />
 <!--              <v-date-picker-years v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />-->
 <!--              <v-date-picker v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />-->

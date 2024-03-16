@@ -11,7 +11,9 @@ export type ErrorResponse<DataT> = {
 
 export type EmptyResponse = {}
 
-export type GetCarByVinResponse = Car | EmptyResponse
+export type GetCarByVinResponse = Car & {
+    current_mileage: number,
+} | EmptyResponse
 
 export type PaginatedResponse<DataT> = {
     current_page: number,

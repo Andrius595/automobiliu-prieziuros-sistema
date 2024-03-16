@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
 import {errorToast, successToast} from "~/utils/toast";
-import type {Car} from "~/types/Car";
-import type {User} from "~/types/User";
+import { useSnackbar } from "~/composables/useSnackbar";
+import { type Car } from '@/types/Car'
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
@@ -10,45 +10,28 @@ const props = defineProps({
     type: Boolean,
     required: true,
   },
-  createPath: {
-    type: String,
-    required: false,
-    default: '/cars',
-  },
-  registration: {
-    type: Boolean,
-    required: false,
-    default: false,
-  }
 })
 
 const errors = ref([])
 
 const emptyCar = {
-  owner_id: null,
   make: '',
   model: '',
   vin: '',
+  plate_no: '',
   year_of_manufacture: null,
+  mileage_type: 0,
 }
 const car = ref<Partial<Car>>({...emptyCar})
-const vin = ref('')
-const owners = ref<User[]>([])
 
 const menu = ref(false)
-
-if (!props.registration) {
-  await loadOwners()
-}
 
 function closeDialog() {
   emit('close')
 }
 
 async function confirmCreate() {
-  console.log('confirmCreate')
-  car.value.vin = vin.value
-  const { data, error } = await backFetch<Car>(props.createPath, {
+  const { data, error } = await backFetch<Car>('/user/register-new-car', {
     method: 'post',
     body: car.value,
     headers: {'Accept': 'application/json'},
@@ -56,27 +39,12 @@ async function confirmCreate() {
 
   if (error.value) {
     errors.value = error.value.data.errors
-    errorToast(error.value.data.message)
+    useSnackbar().show(error.value.data.message)
     return
   }
 
   successToast('Car created successfully!')
   emit('confirm')
-}
-
-async function loadOwners() {
-  const { data, error } = await backFetch<User>('/users/index', {
-    method: 'get',
-    headers: {'Accept': 'application/json'},
-  })
-
-  if (error.value) {
-    errors.value = error.value.data.errors
-    errorToast('Could not fetch owners')
-    return
-  }
-
-  owners.value = data.value
 }
 </script>
 
@@ -88,13 +56,33 @@ async function loadOwners() {
         <v-container>
           <v-row>
             <v-col cols="12" md="6">
-              <v-text-field label="Make" v-model="car.make" :error-messages="errors.make" />
+              <v-text-field :label="$t('car.make')" v-model="car.make" :error-messages="errors.make" />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Model" v-model="car.model" :error-messages="errors.model" />
+              <v-text-field :label="$t('car.model')" v-model="car.model" :error-messages="errors.model" />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Vin" v-model="vin" :error-messages="errors.vin" />
+              <v-text-field :label="$t('car.vin')" v-model="car.vin" :error-messages="errors.vin" />
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-text-field :label="$t('car.plate_no')" v-model="car.plate_no" :error-messages="errors.plate_no" />
+            </v-col>
+            <v-col
+                class="py-2"
+                cols="12"
+                sm="6"
+            >
+              <p>{{ $t('car.mileage_type')}}</p>
+
+              <v-btn-toggle
+                  v-model="car.mileage_type"
+                  mandatory
+                  shaped
+              >
+                <v-btn>KM</v-btn>
+
+                <v-btn>M</v-btn>
+              </v-btn-toggle>
             </v-col>
             <v-col cols="12" md="6">
               <v-menu
@@ -107,7 +95,7 @@ async function loadOwners() {
                 </template>
 
                 <v-card min-width="300">
-                  <v-date-picker-years v-model="car.year_of_manufacture" min="1980" max="2023"></v-date-picker-years>
+                  <v-date-picker-years v-model="car.year_of_manufacture" min="1980" max="2024"></v-date-picker-years>
 
                   <v-card-actions>
                     <v-spacer></v-spacer>
@@ -122,16 +110,6 @@ async function loadOwners() {
                   </v-card-actions>
                 </v-card>
               </v-menu>
-            </v-col>
-            <v-col v-if="!registration" cols="12">
-              <v-select label="Owner" v-model="car.owner_id" :error-messages="errors.owner_id" :items="owners" item-value="id">
-                <template v-slot:item="{ item, index, props}">
-                  <v-list-item v-bind="props">{{ props.title.first_name + ' ' + props.title.last_name}}</v-list-item>
-                </template>
-                <template v-slot:selection="{ item, index }">
-                  {{ item.props.title.first_name + ' ' + item.props.title.last_name}}
-                </template>
-              </v-select>
             </v-col>
           </v-row>
         </v-container>

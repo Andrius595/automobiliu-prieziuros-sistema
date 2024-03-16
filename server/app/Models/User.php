@@ -57,4 +57,9 @@ class User extends Authenticatable implements JWTSubject
 
         return ['roles' => $roles];
     }
+
+    public function cars()
+    {
+        return $this->hasMany(Car::class, 'owner_id');
+    }
 }

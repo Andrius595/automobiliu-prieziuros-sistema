@@ -14,8 +14,6 @@ return new class extends Migration
         Schema::create('records', static function (Blueprint $table) {
             $table->id();
             $table->foreignId('appointment_id')->constrained()->cascadeOnDelete();
-            $table->integer('current_mileage');
-            $table->boolean('mileage_type');
             $table->string('short_description');
             $table->text('description')->nullable();
             $table->timestamps();
