@@ -2,7 +2,7 @@
 import backFetch from "~/utils/backFetch";
 import {errorToast, successToast} from "~/utils/toast";
 import { useSnackbar } from "~/composables/useSnackbar";
-import { type Car } from '@/types/Car'
+import { type Car } from '~/types/Car'
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
@@ -67,23 +67,6 @@ async function confirmCreate() {
             <v-col cols="12" md="6">
               <v-text-field :label="$t('car.plate_no')" v-model="car.plate_no" :error-messages="errors.plate_no" />
             </v-col>
-            <v-col
-                class="py-2"
-                cols="12"
-                sm="6"
-            >
-              <p>{{ $t('car.mileage_type')}}</p>
-
-              <v-btn-toggle
-                  v-model="car.mileage_type"
-                  mandatory
-                  shaped
-              >
-                <v-btn>KM</v-btn>
-
-                <v-btn>M</v-btn>
-              </v-btn-toggle>
-            </v-col>
             <v-col cols="12" md="6">
               <v-menu
                   v-model="menu"
@@ -110,6 +93,23 @@ async function confirmCreate() {
                   </v-card-actions>
                 </v-card>
               </v-menu>
+            </v-col>
+            <v-col
+                class="py-2"
+                cols="12"
+                md="6"
+            >
+              <p>{{ $t('car.mileage_type')}}</p>
+
+              <v-btn-toggle
+                  v-model="car.mileage_type"
+                  mandatory
+                  shaped
+              >
+                <v-btn>KM</v-btn>
+
+                <v-btn>M</v-btn>
+              </v-btn-toggle>
             </v-col>
           </v-row>
         </v-container>

@@ -25,4 +25,9 @@ class Car extends Model
     {
         return $this->hasMany(Appointment::class);
     }
+
+    public function completedAppointments(): HasMany
+    {
+        return $this->appointments()->whereNotNull('completed_at');
+    }
 }

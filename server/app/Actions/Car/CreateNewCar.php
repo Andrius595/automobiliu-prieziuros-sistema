@@ -6,7 +6,7 @@ use App\Actions\CreatesNewRecord;
 use App\Models\Car;
 use Illuminate\Support\Facades\Validator;
 
-class CreateNewCar implements CreatesNewRecord
+class CreateNewCar extends CreatesNewRecord
 {
     public function create(array $input): Car
     {
@@ -15,9 +15,9 @@ class CreateNewCar implements CreatesNewRecord
         return Car::create($input);
     }
 
-    public function validate($input)
+    public function rules($input): array
     {
-        Validator::make($input, [
+        return [
             'vin' => ['required', 'string', 'unique:cars,vin'],
             'plate_no' => ['required', 'string'], // TODO plate rules
             'make' => ['required', 'string'],
@@ -26,6 +26,6 @@ class CreateNewCar implements CreatesNewRecord
             'color' => ['sometimes', 'string'],
             'mileage_type' => ['required', 'boolean'],
             'owner_id' => ['sometimes', 'integer', 'exists:users,id'],
-        ])->validate();
+        ];
     }
 }

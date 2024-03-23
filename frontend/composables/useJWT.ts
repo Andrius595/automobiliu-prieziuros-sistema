@@ -29,10 +29,14 @@ export const useJWT = () => {
     }
 
     const refresh = async (token: string) => {
-        const { data } = await useFetch('api/auth/refresh', {
+        const { data, error } = await useFetch('api/auth/refresh', {
             method: 'POST',
             body: { token }
         })
+
+        if (error.value) {
+            return false
+        }
 
         setToken(data.value as string)
 

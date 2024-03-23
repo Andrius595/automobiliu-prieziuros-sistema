@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
 import {errorToast, successToast} from "~/utils/toast";
-import { type Car } from '@/types/Car'
+import { type Car } from '~/types/Car'
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
@@ -21,6 +21,7 @@ const props = defineProps({
 })
 
 const errors = ref([])
+const menu = ref(false)
 
 watch(() => props.carId, (carId) => {
   if (carId && props.visible) {
@@ -88,6 +89,34 @@ async function confirmEdit() {
             <v-col cols="12" md="6">
               <v-text-field :label="$t('car.plate_no')" v-model="car.plate_no" :error-messages="errors.plate_no" />
             </v-col>
+
+            <v-col cols="12" md="6">
+              <v-menu
+                  v-model="menu"
+                  :close-on-content-click="false"
+                  location="end"
+              >
+                <template v-slot:activator="{ props }">
+                  <v-text-field v-bind="props" label="Year" v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />
+                </template>
+
+                <v-card min-width="300">
+                  <v-date-picker-years v-model="car.year_of_manufacture" min="1980" max="2024"></v-date-picker-years>
+
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+
+                    <v-btn
+                        color="primary"
+                        variant="text"
+                        @click="menu = false"
+                    >
+                      Save
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-menu>
+            </v-col>
             <v-col
                 class="py-2"
                 cols="12"
@@ -104,11 +133,6 @@ async function confirmEdit() {
 
                 <v-btn>M</v-btn>
               </v-btn-toggle>
-            </v-col>
-            <v-col cols="12" md="6">
-              <v-text-field label="Year" v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />
-<!--              <v-date-picker-years v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />-->
-<!--              <v-date-picker v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />-->
             </v-col>
           </v-row>
         </v-container>

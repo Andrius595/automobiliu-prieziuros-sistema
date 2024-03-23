@@ -7,7 +7,7 @@ use App\Models\Car;
 use App\Models\Record;
 use Illuminate\Support\Facades\Validator;
 
-class CreateNewRecord implements CreatesNewRecord
+class CreateNewRecord extends CreatesNewRecord
 {
     public function create(array $input): Record
     {
@@ -16,12 +16,12 @@ class CreateNewRecord implements CreatesNewRecord
         return Record::create($input);
     }
 
-    public function validate($input)
+    public function rules($input): array
     {
-        Validator::make($input, [
+        return [
             'short_description' => ['required', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'appointment_id' => ['required', 'exists:appointments,id'],
-        ])->validate();
+        ];
     }
 }

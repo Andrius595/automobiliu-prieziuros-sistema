@@ -8,6 +8,7 @@ use App\Actions\Appointment\ListAppointments;
 use App\Actions\Car\CreateNewCar;
 use App\Actions\Record\CreateNewRecord;
 use App\Actions\Record\ListRecords;
+use App\Actions\Service\ListServices;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use App\Models\Appointment;
@@ -24,9 +25,21 @@ class ServiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, ListServices $listServices): JsonResponse
     {
-        //
+        $perPage = $request->input('perPage');
+        $searchParams = $request->only([
+            'title',
+            'description',
+        ]);
+        $sortParams = $request->only([
+            'sortBy',
+            'sortDirection',
+        ]);
+
+        $services = $listServices->list($searchParams, $perPage, $sortParams);
+
+        return response()->json($services);
     }
 
     /**
@@ -42,7 +55,7 @@ class ServiceController extends Controller
      */
     public function show(Service $service)
     {
-        //
+        return response()->json($service);
     }
 
     /**
@@ -242,5 +255,25 @@ class ServiceController extends Controller
         $record->update($request->all());
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function registerForAppointment(Request $request, Service $service, CreateNewAppointment $newAppointment)
+    {
+        $user = Auth::user();
+        $carId = $request->input('car_id');
+        $car = Car::findOrFail($carId);
+
+        if ($user->id !== $car->owner_id) {
+            return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $appointment = $newAppointment->create([
+            'service_id' => $service->id,
+            'car_id' => $car->id,
+            'current_mileage' => $car->appointments()->whereNotNull('completed_at')->orderBy('completed_at', 'desc')->first()->current_mileage ?? 0,
+            'mileage_type' => $car->mileage_type,
+        ]);
+
+        return response()->json($appointment, Response::HTTP_CREATED);
     }
 }

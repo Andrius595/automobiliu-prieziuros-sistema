@@ -5,6 +5,7 @@
           :model-value="showSnackbar"
           absolute
           location="top right"
+          @update:model-value="updateSnackbarVisibility"
       >
         {{ $t(snackbarMessage) }}
         <template v-slot:actions>
@@ -60,6 +61,10 @@ function hideSnackbar() {
 const auth = useAuth()
 
 const drawer = ref(true);
+
+function updateSnackbarVisibility(value: boolean) {
+  useSnackbar().setVisibility(value)
+}
 </script>
 
 <style lang="scss">

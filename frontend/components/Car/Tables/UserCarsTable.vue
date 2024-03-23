@@ -37,19 +37,19 @@
               small
               @click="editItem(item.id)"
           >
-            mdi-pencil
+            mdi-eye
           </v-icon>
           <v-icon
               color="red-darken-1"
               small
-              @click="deleteItem(item.id)"
+              @click="removeCar(item.id)"
           >
             mdi-delete
           </v-icon>
         </div>
       </template>
     </v-data-table-server>
-    <DeleteCarDialog :delete-path="deletePath" :car-id="carId" :visible="deleteDialogVisible" @close="deleteDialogVisible = false" @confirm="carDeleted" />
+    <UserRemoveCarDialog :car-id="carId" :visible="deleteDialogVisible" @close="deleteDialogVisible = false" @confirm="carRemoved" />
     <EditCarDialog :edit-path="editPath" :car-id="carId" :visible="editDialogVisible" @close="editDialogVisible = false" @confirm="carEdited" />
     <RegisterCarDialog :visible="createDialogVisible" @close="createDialogVisible = false" @confirm="carCreated" />
   </div>
@@ -58,9 +58,10 @@
 <script setup lang="ts">
 import {type PaginatedResponse} from "@/types/Responses";
 import {type Car} from "@/types/Car";
-import DeleteCarDialog from "~/components/Car/DeleteCarDialog.vue";
-import EditCarDialog from "~/components/Car/EditCarDialog.vue";
-import RegisterCarDialog from "~/components/Car/RegisterCarDialog.vue";
+import DeleteCarDialog from "~/components/Car/Dialogs/DeleteCarDialog.vue";
+import EditCarDialog from "~/components/Car/Dialogs/EditCarDialog.vue";
+import RegisterCarDialog from "~/components/Car/Dialogs/RegisterCarDialog.vue";
+import UserRemoveCarDialog from "~/components/Car/Dialogs/UserRemoveCarDialog.vue";
 
 const props = defineProps({
   userId: {
@@ -113,16 +114,15 @@ function createItem() {
   createDialogVisible.value = true
 }
 function editItem(id: number) {
-  carId.value = id
-  editDialogVisible.value = true
+  navigateTo('/cars/'+id)
 }
 
-function deleteItem(id: number) {
+function removeCar(id: number) {
   carId.value = id
   deleteDialogVisible.value = true
 }
 
-async function carDeleted() {
+async function carRemoved() {
   deleteDialogVisible.value = false
   await loadItems({page: 1, itemsPerPage: itemsPerPage.value, sortBy: []})
 }

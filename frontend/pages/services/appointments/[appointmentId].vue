@@ -5,7 +5,7 @@ import CompleteAppointmentDialog from "~/components/Service/Dialogs/CompleteAppo
 
 const route = useRoute()
 
-const appointmentId = Number.parseInt(route.params.appointmentId as string)
+const appointmentId = Number(route.params.appointmentId as string)
 const appointment = ref<Appointment>()
 
 const isAppointmentCompleted = computed(() => {

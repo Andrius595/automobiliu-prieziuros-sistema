@@ -14,5 +14,7 @@ export const useSnackbar = () => {
     const isVisible = () => visible.value
     const getMessage = () => message.value
 
-    return { show, hide, isVisible, getMessage }
+    const setVisibility = (value: boolean) => visible.value = value
+
+    return { show, hide, isVisible, getMessage, setVisibility }
 }

@@ -48,9 +48,9 @@
 
 <script setup lang="ts">
 import {type PaginatedResponse} from "~/types/Responses";
-import DeleteCarDialog from "~/components/Car/DeleteCarDialog.vue";
-import EditCarDialog from "~/components/Car/EditCarDialog.vue";
-import CreateCarDialog from "~/components/Car/CreateCarDialog.vue";
+import DeleteCarDialog from "~/components/Car/Dialogs/DeleteCarDialog.vue";
+import EditCarDialog from "~/components/Car/Dialogs/EditCarDialog.vue";
+import CreateCarDialog from "~/components/Car/Dialogs/CreateCarDialog.vue";
 
 const itemsPerPage = ref(5)
 const headers = ref([

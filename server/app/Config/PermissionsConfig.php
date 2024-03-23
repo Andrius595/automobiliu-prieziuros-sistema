@@ -6,7 +6,7 @@ class PermissionsConfig {
         self::CLIENT_ROLE,
         self::SERVICE_EMPLOYEE_ROLE,
         self::SERVICE_ADMIN_ROLE,
-        self::SYSTEM_ADMIN,
+        self::SYSTEM_ADMIN_ROLE,
     ];
 
     public const CLIENT_PERMISSIONS = [
@@ -75,7 +75,7 @@ class PermissionsConfig {
     public const CLIENT_ROLE = 'client';
     public const SERVICE_EMPLOYEE_ROLE = 'service_employee';
     public const SERVICE_ADMIN_ROLE = 'service_admin';
-    public const SYSTEM_ADMIN = 'system_admin';
+    public const SYSTEM_ADMIN_ROLE = 'system_admin';
 
     public const CAN_LIST_USERS = 'can_list_users';
     public const CAN_VIEW_USER = 'can_view_user';

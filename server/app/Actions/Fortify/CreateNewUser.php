@@ -2,24 +2,32 @@
 
 namespace App\Actions\Fortify;
 
+use App\Actions\CreatesNewRecord;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Laravel\Fortify\Contracts\CreatesNewUsers;
 
-class CreateNewUser implements CreatesNewUsers
+class CreateNewUser extends CreatesNewRecord
 {
     use PasswordValidationRules;
 
-    /**
-     * Validate and create a newly registered user.
-     *
-     * @param  array<string, string>  $input
-     */
+    public string $model = User::class;
     public function create(array $input): User
     {
-        Validator::make($input, [
+        $this->validate($input);
+
+        return User::create([
+            'first_name' => $input['first_name'],
+            'last_name' => $input['last_name'],
+            'email' => $input['email'],
+            'password' => Hash::make($input['password']),
+        ]);
+    }
+
+
+    public function rules($input): array
+    {
+        return [
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => [
@@ -30,13 +38,6 @@ class CreateNewUser implements CreatesNewUsers
                 Rule::unique(User::class),
             ],
             'password' => $this->passwordRules(),
-        ])->validate();
-
-        return User::create([
-            'first_name' => $input['first_name'],
-            'last_name' => $input['last_name'],
-            'email' => $input['email'],
-            'password' => Hash::make($input['password']),
-        ]);
+        ];
     }
 }

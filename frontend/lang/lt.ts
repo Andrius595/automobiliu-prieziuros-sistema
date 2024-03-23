@@ -19,12 +19,22 @@ const lt = {
         owner: 'Savininkas',
         car: 'Automobilis',
         register_car: 'Registruoti automobilį',
+        remove_car: 'Pašalinti automobilį',
+        confirm_car_removal: 'Ar tikrai norite pašalinti šį automobilį?',
+        general_information: 'Bendra informacija',
+        history: 'Istorija',
+        share_car: 'Dalintis automobiliu',
+        transfer_car: 'Perleisti automobilį',
+        share_history: 'Dalintis istorija',
     },
     service: {
         registrations: {
             confirm_registration: 'Patvirtinti registraciją',
             confirm_registration_message: 'Ar tikrai norite patvirtinti šią registraciją?',
-        }
+        },
+        title: 'Pavadinimas',
+        service_title: 'Serviso pavadinimas',
+        register_for_appointment: 'Registruotis į vizitą',
     },
     record: {
         short_description: 'Trumpas aprašymas',
@@ -38,6 +48,11 @@ const lt = {
         records: 'Aptarnavimo įrašai',
         complete_appointment: 'Užbaigti vizitą',
         check_blockchain_transaction: 'Patikrinti blokų grandinės transakciją',
+        current_mileage: 'Dabartinis kilometražas',
+        records_full_description: 'Aptarnavimo įrašų išsamus aprašymas',
+        blockchain_transaction: 'Blokų grandinės transakcija',
+        completed_at: 'Užbaigta',
+        transaction_check_string: 'Transakcijos tikrinimo eilutė',
     },
     navigation: {
         cars_list: 'Automobilių sąrašas',
@@ -61,6 +76,9 @@ const lt = {
         close: 'Uždaryti',
         confirm: 'Patvirtinti',
         aps: 'APS',
+        remove: 'Pašalinti',
+        transfer: 'Perleisti',
+        share: 'Dalintis',
     },
     auth: {
         login: 'Prisijungti',

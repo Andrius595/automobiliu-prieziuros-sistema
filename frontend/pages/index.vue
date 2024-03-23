@@ -5,7 +5,6 @@ definePageMeta({
 </script>
 
 <template>
-  ASD
 </template>
 
 <style scoped>

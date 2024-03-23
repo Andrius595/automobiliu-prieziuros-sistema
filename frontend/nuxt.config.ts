@@ -1,9 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: {
+    enabled: true,
+
+    timeline: {
+      enabled: true
+    }
+  },
   ssr: false,
   build: {
-    transpile: ['vuetify', 'vue-sonner'],
+    transpile: ['vuetify', 'vue-sonner', 'vue-chartjs'],
   },
   modules: [
     '@vite-pwa/nuxt',
@@ -19,6 +25,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     jwtSecret: process.env.JWT_SECRET,
     public: {
+      appUrl: process.env.AUTH_ORIGIN || 'http://localhost:3000',
       apiURL: process.env.BACKEND_API_URL || 'http://localhost/api',
       jwtTTL: ((process.env.JWT_TTL as number|undefined) || 60) * 60,
       jwtRefreshTTL: ((process.env.JWT_REFRESH_TTL as number|undefined) || 60*24*7) * 60,

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('year_of_manufacture')->nullable();
             $table->string('color')->nullable();
             $table->boolean('mileage_type');
+            $table->timestamp('owner_confirmed_at')->nullable();
             $table->timestamps();
         });
     }

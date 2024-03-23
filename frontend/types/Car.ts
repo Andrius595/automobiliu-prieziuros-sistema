@@ -1,6 +1,9 @@
+import type {User} from "~/types/User";
+
 export type Car = {
     id: number;
     owner_id: number|null;
+    owner: User|undefined;
     make: string;
     model: string;
     vin: string;

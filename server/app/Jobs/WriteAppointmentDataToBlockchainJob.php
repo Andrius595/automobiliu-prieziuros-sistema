@@ -27,10 +27,12 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
     {
         $lambdaService = new LambdaService();
 
-        $car = $this->appointment->car;
-        $records = $this->appointment->records;
+        $appointment = $this->appointment;
 
-        $hash_string = $car->vin . '_' . count($records);
+        $car = $appointment->car;
+        $records = $appointment->records;
+
+        $hash_string = $car->vin . '_' . $appointment->current_mileage . '_' . $appointment->completed_at . '_' . count($records);
 
         foreach ($records as $record) {
             $hash_string .= '_' . $record->short_description;
@@ -46,6 +48,6 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 
         $results = json_decode($awsResults->get('Payload')->getContents(), true);
 
-        $this->appointment->update(['transaction_hash' => $results['body']['txHash']]);
+        $appointment->update(['transaction_hash' => $results['body']['txHash']]);
     }
 }

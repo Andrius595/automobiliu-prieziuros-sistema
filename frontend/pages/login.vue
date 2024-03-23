@@ -9,7 +9,7 @@
           >
             <v-text-field
                 v-model="email"
-                label="E-mail"
+                :label="$t('user.email')"
                 hide-details
                 required
             ></v-text-field>
@@ -21,13 +21,13 @@
                 v-model="password"
                 type="password"
                 :counter="10"
-                label="Password"
+                :label="$t('user.password')"
                 hide-details
                 required
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-btn type="submit" class="mt-4" color="primary">Login</v-btn>
+        <v-btn type="submit" class="mt-4" color="primary">{{ $t('auth.login') }}</v-btn>
       </div>
     </v-form>
   </v-container>
@@ -54,7 +54,7 @@ async function login() {
       },
     })
 
-    await navigateTo('/')
+    await navigateTo('/cars')
 
 
     // if (status.value === 'success') {

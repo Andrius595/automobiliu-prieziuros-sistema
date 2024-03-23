@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $systemAdmin = Role::create(['name' => PermissionsConfig::SYSTEM_ADMIN]);
+        $systemAdmin = Role::create(['name' => PermissionsConfig::SYSTEM_ADMIN_ROLE]);
         $client = Role::create(['name' => PermissionsConfig::CLIENT_ROLE]);
         $serviceEmployee = Role::create(['name' => PermissionsConfig::SERVICE_EMPLOYEE_ROLE]);
         $serviceAdmin = Role::create(['name' => PermissionsConfig::SERVICE_ADMIN_ROLE]);

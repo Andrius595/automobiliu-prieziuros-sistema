@@ -1,15 +1,13 @@
 <template>
   <v-container>
-    <template v-if="true">
-      <template v-if="isClient">
-        <UserCarsTable :user-id="user.id" />
-      </template>
-      <template v-else-if="isServiceEmployee">
-        <ServiceCarsTable :service-id="user.service_id as number" />
-      </template>
-      <template v-else-if="isSystemAdmin">
-        <CarsTable />
-      </template>
+    <template v-if="isClient">
+      <UserCarsTable :user-id="user.id" />
+    </template>
+    <template v-else-if="isServiceEmployee">
+      <ServiceCarsTable :service-id="user.service_id as number" />
+    </template>
+    <template v-else-if="isSystemAdmin">
+      <CarsTable />
     </template>
   </v-container>
 </template>
@@ -23,7 +21,6 @@ const { isClient, isServiceEmployee, isSystemAdmin } = useRoles()
 const auth = useAuth()
 
 const user = await auth.getUser()
-
 
 definePageMeta({
   middleware: ['auth'],
