@@ -14,6 +14,7 @@ const lt = {
         current_mileage: 'Dabartinis kilometražas',
         mileage_type: 'Kilometražo tipas',
         plate_no: 'Valstybinis numeris',
+        color: 'Spalva',
         created_at: 'Sukurta',
         updated_at: 'Atnaujinta',
         owner: 'Savininkas',
@@ -53,6 +54,25 @@ const lt = {
         blockchain_transaction: 'Blokų grandinės transakcija',
         completed_at: 'Užbaigta',
         transaction_check_string: 'Transakcijos tikrinimo eilutė',
+    },
+    reminder: {
+        reminders: 'Priminimai',
+        title: 'Pavadinimas',
+        description: 'Aprašymas',
+        interval: 'Intervalas',
+        last_reminded_at: 'Paskutinis primintas išiųstas',
+        interval_type: 'Intervalo tipas',
+        interval_types: {
+            days: 'Dienos',
+            weeks: 'Savaitės',
+            months: 'Mėnesiai',
+            years: 'Metai',
+            mileage: 'Kilometražas'
+        },
+        new_reminder: 'Naujas priminimas',
+        delete_reminder: 'Ištrinti priminimą',
+        confirm_delete_message: 'Ar tikrai norite ištrinti šį priminimą?',
+        edit_reminder: 'Redaguoti priminimą',
     },
     navigation: {
         cars_list: 'Automobilių sąrašas',

@@ -60,7 +60,7 @@ function hideSnackbar() {
 
 const auth = useAuth()
 
-const drawer = ref(true);
+const drawer = ref(false); // should be stored in useState
 
 function updateSnackbarVisibility(value: boolean) {
   useSnackbar().setVisibility(value)

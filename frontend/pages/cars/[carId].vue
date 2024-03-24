@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
 import type {Car} from "~/types/Car";
+import CarRemindersWindow from "~/components/Car/CarRemindersWindow.vue";
 
 const route = useRoute()
 
@@ -34,6 +35,7 @@ async function fetchCarInformation(carId: number) {
       >
         <v-tab :value="1">{{ $t('car.general_information') }}</v-tab>
         <v-tab :value="2">{{ $t('car.history') }}</v-tab>
+        <v-tab :value="3">{{ $t('reminder.reminders') }}</v-tab>
       </v-tabs>
     </div>
 
@@ -50,6 +52,13 @@ async function fetchCarInformation(carId: number) {
       >
         <v-container fluid>
           <CarHistoryWindow :car-id="carId" />
+        </v-container>
+      </v-window-item>
+      <v-window-item
+          :value="3"
+      >
+        <v-container fluid>
+          <CarRemindersWindow :car-id="carId" />
         </v-container>
       </v-window-item>
     </v-window>

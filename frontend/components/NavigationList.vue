@@ -8,7 +8,9 @@
 
 <script setup lang="ts">
 import {useRoles} from "~/composables/useRoles";
-const { isClient, isServiceEmployee } = useRoles()
+const { isClient, isServiceEmployee, isServiceAdmin, isSystemAdmin } = useRoles()
+
+console.log(isServiceAdmin.value, isSystemAdmin.value)
 
 const list = computed(() => {
   if (isClient.value) {
@@ -22,6 +24,14 @@ const list = computed(() => {
       {title: 'navigation.services.registrations_list', to: '/services/registrations'},
       {title: 'navigation.services.active_appointments', to: '/services/active-appointments'},
       {title: 'navigation.services.completed_appointments', to: '/services/completed-appointments'},
+    ]
+  } else if (isServiceAdmin.value) {
+    return [
+      {title: 'navigation.services.new_appointment', to: '/services/create-appointment'},
+      {title: 'navigation.services.registrations_list', to: '/services/registrations'},
+      {title: 'navigation.services.active_appointments', to: '/services/active-appointments'},
+      {title: 'navigation.services.completed_appointments', to: '/services/completed-appointments'},
+      {title: 'navigation.services.employees_list', to: '/services/employees'},
     ]
   }
 })

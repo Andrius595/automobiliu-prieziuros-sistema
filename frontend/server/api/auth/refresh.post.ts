@@ -13,6 +13,7 @@ export default defineEventHandler(async (event: H3Event) => {
         }
     })
 
+    setCookie(event, 'token', response.token)
 
     return response.token || ''
 })

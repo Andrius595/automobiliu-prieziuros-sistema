@@ -26,6 +26,16 @@ export const useRoles = () => {
         return data.roles.includes(Roles.SERVICE_EMPLOYEE)
     }
 
+    const hasServiceAdminRole = async (): Promise<boolean> => {
+        const data: JwtData|null = await jwt.getTokenData()
+
+        if (!data) {
+            return false
+        }
+
+        return data.roles.includes(Roles.SERVICE_ADMIN)
+    }
+
     const hasSystemAdminRole = async (): Promise<boolean> => {
         const data: JwtData|null = await jwt.getTokenData()
 
@@ -44,9 +54,13 @@ export const useRoles = () => {
         return await hasServiceEmployeeRole()
     })
 
+    const isServiceAdmin = asyncComputed(async () => {
+        return await hasServiceAdminRole()
+    })
+
     const isSystemAdmin = asyncComputed(async () => {
         return await hasSystemAdminRole()
     })
 
-    return { isClient, isServiceEmployee, isSystemAdmin }
+    return { isClient, isServiceEmployee, isServiceAdmin, isSystemAdmin }
 }

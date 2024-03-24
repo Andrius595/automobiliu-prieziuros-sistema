@@ -46,15 +46,23 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('/cars', CarController::class);
     Route::group(['prefix' => '/cars'], function() {
         Route::get('/vin/{vin}', [ServiceController::class, 'getCarByVin']);
+        Route::get('/reminders/{reminder}', [ReminderController::class, 'show']);
+        Route::put('/reminders/{reminder}', [ReminderController::class, 'update']);
+        Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy']);
         Route::get('/{car}/history', [CarController::class, 'getCarHistory']);
         Route::get('/{car}/reminders', [ReminderController::class, 'getCarReminders']);
         Route::post('/{car}/reminders', [ReminderController::class, 'createCarReminder']);
-        Route::put('/{car}/reminders/{reminder}', [ReminderController::class, 'updateCarReminder']);
-        Route::delete('/{car}/reminders/{reminder}', [ReminderController::class, 'deleteCarReminder']);
     });
+
     Route::apiResource('services', ServiceController::class);
-    Route::group(['prefix' => 'services'], function() {
-        Route::post('/{service}/register', [ServiceController::class, 'registerForAppointment']);
+    Route::group(['prefix' => 'services/{service}'], function() {
+        Route::post('/register', [ServiceController::class, 'registerForAppointment']);
+        Route::group(['prefix' => '/employees'], function() {
+            Route::get('/', [ServiceController::class, 'getEmployees']);
+            Route::post('/', [ServiceController::class, 'createEmployee']);
+            Route::put('/{employee}', [ServiceController::class, 'updateEmployee']);
+            Route::delete('/{employee}', [ServiceController::class, 'deleteEmployee']);
+        });
     });
     Route::apiResource('appointments', AppointmentController::class);
     Route::apiResource('records', RecordController::class);
@@ -89,12 +97,6 @@ Route::group(['middleware' => 'auth:api'], function () {
                 Route::get('/', [ServiceController::class, 'getAppointmentRecords']);
                 Route::post('/', [ServiceController::class, 'createRecord']);
             });
-        });
-        Route::group(['prefix' => 'employees'], function() {
-            Route::get('/', [ServiceController::class, 'getEmployees']);
-            Route::post('/', [ServiceController::class, 'createEmployee']);
-            Route::put('/{employee}', [ServiceController::class, 'updateEmployee']);
-            Route::delete('/{employee}', [ServiceController::class, 'deleteEmployee']);
         });
     });
 });
