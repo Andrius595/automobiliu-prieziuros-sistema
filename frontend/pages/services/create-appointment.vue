@@ -76,7 +76,6 @@
 
 <script setup lang="ts">
 import {type GetCarByVinResponse} from "~/types/Responses";
-import {errorToast, successToast} from "~/utils/toast";
 import {definePageMeta} from "#imports";
 import type {Appointment} from "~/types/Appointment";
 

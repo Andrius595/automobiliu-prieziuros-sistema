@@ -3,9 +3,6 @@
     <template v-if="isClient">
       <UserCarsTable :user-id="user.id" />
     </template>
-    <template v-else-if="isServiceEmployee">
-      <ServiceCarsTable :service-id="user.service_id as number" />
-    </template>
     <template v-else-if="isSystemAdmin">
       <CarsTable />
     </template>
@@ -23,6 +20,6 @@ const auth = useAuth()
 const user = await auth.getUser()
 
 definePageMeta({
-  middleware: ['auth'],
+  middleware: ['auth', 'system-admin-or-client'],
 })
 </script>

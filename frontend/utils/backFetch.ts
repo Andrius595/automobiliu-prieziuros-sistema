@@ -1,18 +1,10 @@
-import {type AsyncData, type UseFetchOptions} from "nuxt/app";
-import {FetchError} from "ofetch";
-import {AvailableRouterMethod, NitroFetchRequest} from "nitropack";
-import {KeysOf, PickFrom} from "#app/composables/asyncData";
+import type { UseFetchOptions} from "nuxt/app";
+import {SymbolKind} from "vscode-languageserver-types";
 
-export default async <DataT>(
+export default async <DataT, ErrorT = any>(
     route: string,
-    options: UseFetchOptions<
-        DataT extends void ? unknown : DataT,
-        DataT extends void ? unknown : DataT,
-        KeysOf<DataT extends void ? unknown : DataT>,
-        null,
-        NitroFetchRequest,
-        DataT extends void ? "get" : AvailableRouterMethod<NitroFetchRequest>>
-): Promise<AsyncData<PickFrom<DataT extends void ? unknown : DataT, KeysOf<DataT extends void ? unknown : DataT>>|null,FetchError|null>> =>
+    options: UseFetchOptions<DataT>
+) =>
 {
     const jwt = useJWT()
 
@@ -23,9 +15,16 @@ export default async <DataT>(
     }
 
     options.headers = {
-        ...options.headers,
+        ...(options.headers || {}),
         Authorization: 'Bearer ' + token
     }
+    if (!Object.hasOwn(options.headers as Object, 'Accept')) {
+        options.headers = {
+            ...options.headers,
+            Accept: 'application/json'
+        }
+    }
+    options.watch = false;
 
-    return useFetch<DataT, FetchError>(useRuntimeConfig().public.apiURL + route, options)
+    return useFetch(useRuntimeConfig().public.apiURL + route, options) as ReturnType<(typeof useFetch<DataT, ErrorT>)>;
 }

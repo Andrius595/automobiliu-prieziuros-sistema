@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
-import {errorToast, successToast} from "~/utils/toast";
 import type {Car} from "~/types/Car";
 import type {User} from "~/types/User";
 
@@ -65,7 +64,7 @@ async function confirmCreate() {
 }
 
 async function loadOwners() {
-  const { data, error } = await backFetch<User>('/users/index', {
+  const { data, error } = await backFetch<User>('/users/list-for-select', {
     method: 'get',
     headers: {'Accept': 'application/json'},
   })

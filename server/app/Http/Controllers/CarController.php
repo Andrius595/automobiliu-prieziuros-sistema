@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Car\ListCars;
 use App\Actions\Car\UpdateCar;
 use App\Config\PermissionsConfig;
 use App\Http\Requests\StoreCarRequest;
@@ -9,14 +10,27 @@ use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Nette\NotImplementedException;
 
 class CarController extends Controller
 {
-    public function index()
+    public function index(Request $request, ListCars $listCars)
     {
-        throw new NotImplementedException();
+        $perPage = $request->input('perPage', 10);
+        $searchParams = $request->only([
+            'make',
+            'model',
+            'vin'
+        ]);
+        $sortParams = $request->only([
+            'sortBy',
+            'sortDirection',
+        ]);
+        $cars = $listCars->list($searchParams, $perPage, $sortParams, ['owner']);
+
+        return response()->json($cars);
     }
 
     public function store(StoreCarRequest $request)

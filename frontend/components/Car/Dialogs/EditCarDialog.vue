@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
-import {errorToast, successToast} from "~/utils/toast";
 import { type Car } from '~/types/Car'
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])

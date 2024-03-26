@@ -10,7 +10,7 @@
           >
             <v-text-field
                 v-model="form.first_name"
-                :label="$t('first_name')"
+                :label="$t('user.first_name')"
                 hide-details
                 required
             ></v-text-field>
@@ -21,7 +21,7 @@
           >
             <v-text-field
                 v-model="form.last_name"
-                :label="$t('last_name')"
+                :label="$t('user.last_name')"
                 hide-details
                 required
             ></v-text-field>
@@ -31,7 +31,7 @@
           >
             <v-text-field
                 v-model="form.email"
-                :label="$t('email')"
+                :label="$t('user.email')"
                 hide-details
                 required
             ></v-text-field>
@@ -44,7 +44,7 @@
                 v-model="form.password"
                 type="password"
                 :counter="10"
-                :label="$t('password')"
+                :label="$t('user.password')"
                 hide-details
                 required
             ></v-text-field>
@@ -57,13 +57,18 @@
                 v-model="form.password_confirmation"
                 type="password"
                 :counter="10"
-                :label="$t('password_confirmation')"
+                :label="$t('user.password_confirmation')"
                 hide-details
                 required
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-btn type="submit" class="mt-4" color="primary">Login</v-btn>
+        <div class="d-flex align-center mt-4">
+          <v-spacer />
+
+          <span class="text-subtitle-2 text-uppercase">{{ $t('auth.already_have_an_account') }} <NuxtLink to="/login"><span class="text-primary">{{ $t('auth.login') }}!</span></NuxtLink></span>
+          <v-btn variant="elevated" type="submit" color="primary" class="ml-2">{{ $t('auth.register') }}</v-btn>
+        </div>
       </div>
     </v-form>
   </v-container>

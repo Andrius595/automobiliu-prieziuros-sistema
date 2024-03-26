@@ -25,7 +25,13 @@ abstract class ListsRecords
         $this->searchQuery($searchParams);
         $this->sortQuery($sortParams);
 
-        return $this->query->paginate($perPage);
+        return $this->query->paginate(function ($total) use ($perPage) {
+            if ($perPage === -1) {
+                return $total;
+            }
+
+            return $perPage;
+        });
     }
 
     public function searchQuery($searchParams): static

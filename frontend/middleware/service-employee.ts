@@ -4,7 +4,7 @@ import {useRoles} from "~/composables/useRoles";
 export default defineNuxtRouteMiddleware(async (to, from) => {
     const { isServiceEmployee } = useRoles()
 
-    if (!isServiceEmployee) {
+    if (!isServiceEmployee.value) {
         await navigateTo('/dashboard');
     }
 })

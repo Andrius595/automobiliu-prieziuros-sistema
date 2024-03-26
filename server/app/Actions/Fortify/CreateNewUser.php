@@ -3,6 +3,7 @@
 namespace App\Actions\Fortify;
 
 use App\Actions\CreatesNewRecord;
+use App\Config\PermissionsConfig;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
@@ -16,12 +17,16 @@ class CreateNewUser extends CreatesNewRecord
     {
         $this->validate($input);
 
-        return User::create([
+        $user = User::create([
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
-            'password' => Hash::make($input['password']),
+            'password' => 'not_set',
         ]);
+
+        $user->assignRole($input['role']);
+
+        return $user;
     }
 
 
@@ -37,7 +42,7 @@ class CreateNewUser extends CreatesNewRecord
                 'max:255',
                 Rule::unique(User::class),
             ],
-            'password' => $this->passwordRules(),
+            'role' => ['required', Rule::in(PermissionsConfig::ROLES)],
         ];
     }
 }

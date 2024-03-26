@@ -19,6 +19,7 @@ class ListAppointments extends ListsRecords
                 }),
                 'registrations' => (bool)$searchParams['registrations'] === true ? $this->query->whereNull('confirmed_at') : $this->query,
                 'active' => (bool)$searchParams['active'] === true ? $this->query->whereNull('completed_at') : $this->query,
+                'completed' => (bool)$searchParams['completed'] === true ? $this->query->whereNotNull('completed_at') : $this->query,
                 default => $this->query->where($key, 'like', "%$searchParam%"),
             };
         }

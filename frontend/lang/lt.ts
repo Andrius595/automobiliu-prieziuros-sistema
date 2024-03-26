@@ -5,6 +5,12 @@ const lt = {
         email: 'El. paštas',
         password: 'Slaptažodis',
         password_confirmation: 'Pakartokite slaptažodį',
+        role: 'Rolė',
+        create_user: 'Sukurti naudotoją',
+        created_successfully: 'Naudotojas sėkmingai sukurtas',
+        delete_user: 'Ištrinti naudotoją',
+        confirm_delete_message: 'Ar tikrai norite ištrinti šį naudotoją?',
+        deleted_successfully: 'Naudotojas sėkmingai ištrintas',
     },
     car: {
         make: 'Markė',
@@ -33,9 +39,19 @@ const lt = {
             confirm_registration: 'Patvirtinti registraciją',
             confirm_registration_message: 'Ar tikrai norite patvirtinti šią registraciją?',
         },
+        employees: {
+            employee: 'Darbuotojas',
+            employees: 'Darbuotojai',
+            create_employee: 'Sukurti darbuotoją',
+            edit_employee: 'Redaguoti darbuotoją',
+            delete_employee: 'Ištrinti darbuotoją',
+            confirm_delete_message: 'Ar tikrai norite ištrinti šį darbuotoją?',
+        },
         title: 'Pavadinimas',
+        description: 'Aprašymas',
         service_title: 'Serviso pavadinimas',
         register_for_appointment: 'Registruotis į vizitą',
+        edit_information: 'Redaguoti informaciją',
     },
     record: {
         short_description: 'Trumpas aprašymas',
@@ -77,11 +93,14 @@ const lt = {
     navigation: {
         cars_list: 'Automobilių sąrašas',
         services_list: 'Servisų sąrašas',
+        users_list: 'Naudotojų sąrašas',
         services: {
             new_appointment: 'Naujas vizitas',
             registrations_list: 'Registracijų sąrašas',
             active_appointments: 'Aktyvūs vizitai',
             completed_appointments: 'Užbaigti vizitai',
+            employees_list: 'Darbuotojų sąrašas',
+            edit_service_information: 'Redaguoti serviso informaciją',
         },
     },
     tables: {
@@ -96,15 +115,29 @@ const lt = {
         close: 'Uždaryti',
         confirm: 'Patvirtinti',
         aps: 'APS',
+        aps_full: 'Automobilių priežiūros sistema',
         remove: 'Pašalinti',
         transfer: 'Perleisti',
         share: 'Dalintis',
+        create: 'Sukurti',
     },
     auth: {
         login: 'Prisijungti',
         register: 'Registruotis',
         logout: 'Atsijungti',
+        already_have_an_account: 'Jau turite paskyrą?',
+        dont_have_an_account: 'Neturite paskyros?',
+        forgot_password: 'Pamiršote slaptažodį?',
+        reset_password: 'Atstatyti slaptažodį',
+        remind_password: 'Priminti slaptažodį',
+        send_reset_link: 'Siųsti atstatymo nuorodą',
     },
+    roles: {
+        client: 'Klientas',
+        service_employee: 'Serviso darbuotojas',
+        service_admin: 'Serviso administratorius',
+        system_admin: 'Sistemos administratorius',
+    }
 }
 
 export default lt

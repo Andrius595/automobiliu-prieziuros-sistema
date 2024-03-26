@@ -18,6 +18,7 @@
           </v-btn>
         </template>
       </v-snackbar>
+      <VSonner position="top-right" style="min-width: 344px!important;" />
     </ClientOnly>
     <v-navigation-drawer v-model="drawer" border="primary thick opacity-1">
       <template v-slot:prepend>
@@ -51,6 +52,7 @@
 import NavigationList from '@/components/NavigationList.vue';
 import { useSnackbar } from '@/composables/useSnackbar';
 import {useAuth} from "~/composables/useAuth";
+import {VSonner} from "vuetify-sonner";
 
 const showSnackbar = computed(() => useSnackbar().isVisible())
 const snackbarMessage = computed(() => useSnackbar().getMessage())

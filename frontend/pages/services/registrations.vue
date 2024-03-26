@@ -5,8 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import {type GetCarByVinResponse} from "~/types/Responses";
-import {errorToast, successToast} from "~/utils/toast";
 import {definePageMeta} from "#imports";
 import ServiceRegistrationsTable from "~/components/Service/Tables/ServiceRegistrationsTable.vue";
 

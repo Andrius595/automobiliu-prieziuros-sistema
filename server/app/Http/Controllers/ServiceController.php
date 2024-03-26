@@ -8,23 +8,28 @@ use App\Actions\Appointment\ListAppointments;
 use App\Actions\Car\CreateNewCar;
 use App\Actions\Record\CreateNewRecord;
 use App\Actions\Record\ListRecords;
+use App\Actions\Service\CreateEmployee;
+use App\Actions\Service\ListEmployees;
 use App\Actions\Service\ListServices;
+use App\Actions\Service\UpdateEmployee;
+use App\Actions\Service\UpdateService;
+use App\Actions\User\ListUsers;
+use App\Config\PermissionsConfig;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use App\Models\Appointment;
 use App\Models\Car;
 use App\Models\Record;
 use App\Models\Service;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request, ListServices $listServices): JsonResponse
     {
         $perPage = $request->input('perPage');
@@ -42,30 +47,39 @@ class ServiceController extends Controller
         return response()->json($services);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(StoreServiceRequest $request)
+    public function store(StoreServiceRequest $request, CreateEmployee $newEmployee)
     {
-        //
+        $data = $request->validated();
+
+        $serviceData = [
+            'title' => $data['title'],
+        ];
+        $service = Service::create($serviceData);
+
+        $employeeData = [
+            ...$data,
+            'service_id' => $service->id,
+            'role' => PermissionsConfig::SERVICE_ADMIN_ROLE,
+        ];
+        $user = $newEmployee->create($employeeData);
+
+        return response()->json([
+            'service' => $service,
+            'user' => $user,
+        ], Response::HTTP_CREATED);
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Service $service)
     {
         return response()->json($service);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateServiceRequest $request, Service $service)
+    public function update(UpdateServiceRequest $request, Service $service, UpdateService $updateService): JsonResponse
     {
-        //
-    }
+        $updateService->update($service, $request->all());
 
+        return response()->json($service);
+    }
     /**
      * Remove the specified resource from storage.
      */
@@ -123,6 +137,26 @@ class ServiceController extends Controller
         ]);
         $relations = ['car.owner'];
         $searchParams['active'] = true;
+        $searchParams['service_id'] = Auth::user()->service_id;
+        $appointments = $listAppointments->list($searchParams, $perPage, $sortParams, $relations);
+
+        return response()->json($appointments);
+    }
+
+    public function getCompletedAppointments(Request $request, ListAppointments $listAppointments): JsonResponse
+    {
+        $perPage = $request->input('perPage');
+        $searchParams = $request->only([
+            'make',
+            'model',
+            'vin'
+        ]);
+        $sortParams = $request->only([
+            'sortBy',
+            'sortDirection',
+        ]);
+        $relations = ['car.owner'];
+        $searchParams['completed'] = true;
         $searchParams['service_id'] = Auth::user()->service_id;
         $appointments = $listAppointments->list($searchParams, $perPage, $sortParams, $relations);
 
@@ -257,7 +291,7 @@ class ServiceController extends Controller
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function registerForAppointment(Request $request, Service $service, CreateNewAppointment $newAppointment)
+    public function registerForAppointment(Request $request, Service $service, CreateNewAppointment $newAppointment): JsonResponse
     {
         $user = Auth::user();
         $carId = $request->input('car_id');
@@ -275,5 +309,64 @@ class ServiceController extends Controller
         ]);
 
         return response()->json($appointment, Response::HTTP_CREATED);
+    }
+
+    public function getEmployees(Request $request, Service $service, ListUsers $listEmployees): JsonResponse
+    {
+        $perPage = $request->input('perPage');
+        $searchParams = $request->only([
+            'name',
+            'email',
+        ]);
+        $sortParams = $request->only([
+            'sortBy',
+            'sortDirection',
+        ]);
+        $searchParams['service_id'] = $service->id;
+        $employees = $listEmployees->list($searchParams, $perPage, $sortParams, ['roles']);
+
+        return response()->json($employees);
+    }
+
+    public function getEmployee(Service $service, User $user): JsonResponse
+    {
+        if ($user->service_id !== $service->id) {
+            return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
+        }
+        $user->role = $user->roles()->first()->name;
+
+        return response()->json($user);
+    }
+
+    public function createEmployee(Request $request, Service $service, CreateEmployee $createEmployee): JsonResponse
+    {
+        $data = $request->all();
+        $data['service_id'] = $service->id;
+
+        $employee = $createEmployee->create($data);
+
+        return response()->json($employee, Response::HTTP_CREATED);
+    }
+
+    public function deleteEmployee(Request $request, Service $service, User $user): JsonResponse
+    {
+        if ($user->service_id !== $service->id) {
+            return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $user->delete();
+
+        return response()->json(null, Response::HTTP_NO_CONTENT);
+    }
+
+    public function updateEmployee(Request $request, Service $service, User $user, UpdateEmployee $updateEmployee): JsonResponse
+    {
+        if ($user->service_id !== $service->id) {
+            return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        $updateEmployee->update($user, $request->all());
+
+        return response()->json($user);
     }
 }

@@ -1,9 +1,10 @@
 import {useJWT} from "~/composables/useJWT";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    const token = await useJWT().getToken()
+    const user = await useAuth().getUser()
 
-    if (token) {
-        return await navigateTo('/')
+    console.log(user)
+    if (user) {
+        return navigateTo('/');
     }
 })

@@ -10,13 +10,16 @@ export const useAuth = () => {
     }
 
     const fetchUser = async () => {
-        const { data } = await backFetch<UserSession>('/auth/user', {method: 'get'})
+        const { data } = await backFetch<UserSession|null>('/auth/user', {method: 'get', headers: {Accept: 'application/json'}})
 
         return data.value
     }
 
-    const getUser = async (forceFetch = false): Promise<UserSession> => {
-        if (forceFetch || _user.value === undefined) {
+    const getUser = async (forceFetch = false): Promise<UserSession|null> => {
+        if (forceFetch || _user.value === undefined || _user.value === null) {
+            if (!jwt.getToken()) {
+                return null
+            }
             const user = await fetchUser()
             if (user && 'id' in user) {
                 setUser(user)

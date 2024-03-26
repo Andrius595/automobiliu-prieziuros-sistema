@@ -4,6 +4,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     const token = await useJWT().getToken()
 
     if (!token) {
-        return await navigateTo('/login')
+        return navigateTo('/login');
     }
 })

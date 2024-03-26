@@ -8,4 +8,5 @@
   </div>
 </template>
 <script setup lang="ts">
+import 'vuetify-sonner/style.css'
 </script>

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
-import {errorToast, successToast} from "~/utils/toast";
 import {useSnackbar} from "~/composables/useSnackbar";
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])

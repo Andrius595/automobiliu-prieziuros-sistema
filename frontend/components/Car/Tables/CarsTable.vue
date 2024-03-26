@@ -51,6 +51,7 @@ import {type PaginatedResponse} from "~/types/Responses";
 import DeleteCarDialog from "~/components/Car/Dialogs/DeleteCarDialog.vue";
 import EditCarDialog from "~/components/Car/Dialogs/EditCarDialog.vue";
 import CreateCarDialog from "~/components/Car/Dialogs/CreateCarDialog.vue";
+import type {Car} from "~/types/Car";
 
 const itemsPerPage = ref(5)
 const headers = ref([

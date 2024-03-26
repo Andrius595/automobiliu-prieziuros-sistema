@@ -10,6 +10,13 @@
         item-value="id"
         @update:options="loadItems"
     >
+      <template #top>
+        <div class="pa-2 d-flex justify-space-between align-center bg-secondary">
+          <h2>{{ $t('navigation.services_list') }}</h2>
+          <v-btn color="primary" @click="createItem">{{ $t('service.create_service') }}</v-btn>
+        </div>
+        <v-divider />
+      </template>
       <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
         <tr>
           <template v-for="column in columns" :key="column.key">
@@ -30,8 +37,7 @@
         </div>
       </template>
     </v-data-table-server>
-
-    <ConfirmRegistrationDialog :visible="showConfirmationDialog" :appointment-id="actionItemId" @confirm="appointmentConfirmed" @close="closeAppointmentConfirmDialog" />
+    <CreateServiceDialog :visible="showCreateDialog" @close="closeCreateDialog" @confirm="serviceCreated" />
   </div>
 </template>
 
@@ -41,6 +47,8 @@ import backFetch from "~/utils/backFetch";
 import type {Appointment} from "~/types/Appointment";
 import ConfirmRegistrationDialog from "~/components/Service/Dialogs/ConfirmRegistrationDialog.vue";
 import type {Service} from "~/types/Service";
+import type {DatatablesOptions} from "~/types/DataTable";
+import CreateServiceDialog from "~/components/Service/Dialogs/CreateServiceDialog.vue";
 
 const itemsPerPage = ref(5)
 const headers = ref([
@@ -52,16 +60,16 @@ const totalItems = ref(0)
 const serverItems = ref<Appointment[]>([])
 const loading = ref(true)
 
-const showConfirmationDialog = ref(false)
+const showCreateDialog = ref(false)
 const actionItemId = ref<number|undefined>(undefined)
 
-async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerPage: number, sortBy: { key: string, order: 'asc'|'desc' }}) {
+async function loadItems({page, itemsPerPage, sortBy}: DatatablesOptions) {
   loading.value = true
   const query = {
     perPage: itemsPerPage,
     page,
-    sortBy: sortBy[0]?.key,
-    sortDirection: sortBy[0]?.order,
+    sortBy: sortBy?.length ? sortBy[0].key : null,
+    sortDirection: sortBy?.length ? sortBy[0].order : null,
   }
 
   const { data }  = await backFetch<PaginatedResponse<Service>>('/services/', {
@@ -70,25 +78,22 @@ async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerP
     headers: {'Accept': 'application/json'},
   })
 
-
   serverItems.value = data.value?.data || []
   totalItems.value = data.value?.total || 0
   loading.value = false
 }
 
-function showConfirmAppointmentDialog(itemId: number) {
-  actionItemId.value = itemId
-  showConfirmationDialog.value = true
+function createItem() {
+  showCreateDialog.value = true
 }
 
-function appointmentConfirmed() {
-  closeAppointmentConfirmDialog()
-  loadItems({page: 1, itemsPerPage: itemsPerPage.value, sortBy: ''})
+function closeCreateDialog() {
+  showCreateDialog.value = false
 }
 
-function closeAppointmentConfirmDialog() {
-  showConfirmationDialog.value = false
-  actionItemId.value = undefined
+function serviceCreated() {
+  closeCreateDialog()
+  loadItems({page: 1, itemsPerPage: itemsPerPage.value, sortBy: []})
 }
 
 </script>
