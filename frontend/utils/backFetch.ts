@@ -1,9 +1,9 @@
 import type { UseFetchOptions} from "nuxt/app";
-import {SymbolKind} from "vscode-languageserver-types";
+import {serialize} from "object-to-formdata";
 
 export default async <DataT, ErrorT = any>(
     route: string,
-    options: UseFetchOptions<DataT>
+    options: UseFetchOptions<DataT> & {sendsFiles?: boolean}
 ) =>
 {
     const jwt = useJWT()
@@ -17,6 +17,11 @@ export default async <DataT, ErrorT = any>(
     options.headers = {
         ...(options.headers || {}),
         Authorization: 'Bearer ' + token
+    }
+    if (options.sendsFiles) {
+        (options.body as any)._method = options.method
+        options.method = 'post'
+        options.body = serialize(options.body)
     }
     if (!Object.hasOwn(options.headers as Object, 'Accept')) {
         options.headers = {

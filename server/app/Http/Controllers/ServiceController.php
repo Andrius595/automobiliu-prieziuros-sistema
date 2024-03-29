@@ -9,7 +9,6 @@ use App\Actions\Car\CreateNewCar;
 use App\Actions\Record\CreateNewRecord;
 use App\Actions\Record\ListRecords;
 use App\Actions\Service\CreateEmployee;
-use App\Actions\Service\ListEmployees;
 use App\Actions\Service\ListServices;
 use App\Actions\Service\UpdateEmployee;
 use App\Actions\Service\UpdateService;
@@ -25,7 +24,6 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Password;
 use Symfony\Component\HttpFoundation\Response;
 
 class ServiceController extends Controller
@@ -47,7 +45,7 @@ class ServiceController extends Controller
         return response()->json($services);
     }
 
-    public function store(StoreServiceRequest $request, CreateEmployee $newEmployee)
+    public function store(StoreServiceRequest $request, CreateEmployee $newEmployee): JsonResponse
     {
         $data = $request->validated();
 
@@ -69,14 +67,18 @@ class ServiceController extends Controller
         ], Response::HTTP_CREATED);
     }
 
-    public function show(Service $service)
+    public function show(Service $service): JsonResponse
     {
+        $service->service_categories_ids = $service->service_categories()->pluck('service_categories.id');
+
         return response()->json($service);
     }
 
     public function update(UpdateServiceRequest $request, Service $service, UpdateService $updateService): JsonResponse
     {
-        $updateService->update($service, $request->all());
+        $data = $request->validated();
+        $data['image'] = $request->file('image')[0] ?? null;
+        $updateService->update($service, $data);
 
         return response()->json($service);
     }

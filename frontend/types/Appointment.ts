@@ -8,7 +8,7 @@ export type Appointment = {
     car: Car|undefined;
     service: Service|undefined;
     records: Record[]|undefined
-    current_mi: number;
+    current_mileage: number;
     completed_at: string|null;
     confirmed_at: string|null;
     created_at: string|null;

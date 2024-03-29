@@ -5,18 +5,6 @@
         :items="items"
         class="elevation-1"
     >
-      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-        <tr>
-          <template v-for="column in columns" :key="column.key">
-            <th :class="{'text-end': column.align === 'end'}">
-              <span class="mr-2" :class="{'cursor-pointer': column.sortable}" @click="() => column.sortable ? toggleSort(column) : false">{{ $t(column.title) }}</span>
-              <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)"></v-icon>
-              </template>
-            </th>
-          </template>
-        </tr>
-      </template>
       <template v-slot:item.current_mileage="{ item }">
         <span>{{ item.current_mileage}} {{ item.mileage_type ? 'm' : 'km'}}</span>
       </template>
@@ -50,33 +38,60 @@
           <span>{{ generateCheckHashString(item) }}</span>
         </v-tooltip>
       </template>
+      <template v-if="!isPublic" v-slot:item.actions="{ item }">
+        <div class="d-flex flex-nowrap justify-end">
+          <v-icon
+              color="secondary"
+              class="mr-2"
+              small
+              @click="writeReview(item.id)"
+          >
+            mdi-message-draw
+          </v-icon>
+        </div>
+      </template>
     </v-data-table>
+    <WriteReviewDialog :visible="showReviewDialog" :appointment-id="actionItemId" @close="closeReviewDialog" @confirm="closeReviewDialog" />
   </div>
 </template>
 
 <script setup lang="ts">
 import type {Appointment} from "~/types/Appointment";
+import WriteReviewDialog from "~/components/Appointment/Dialogs/WriteReviewDialog.vue";
+import type {Record} from "~/types/Record";
+import type {Car} from "~/types/Car";
+
+const { t } = useI18n();
 
 const props = defineProps({
   appointments: {
     type: Array,
     required: true,
   },
+  isPublic: {
+    type: Boolean,
+    required: false,
+    default: false,
+  }
 })
+
+const showReviewDialog = ref(false)
+const actionItemId = ref<number>()
 
 const items = ref([...props.appointments])
 
 const headers = ref([
-  {title: 'service.service_title', key: 'service.title', sortable: false},
-  {title: 'appointment.current_mileage', key: 'current_mileage', sortable: false},
-  {title: 'appointment.completed_at', key: 'completed_at', sortable: false},
-  {title: 'appointment.records', key: 'records_short_description', sortable: false},
-  {title: 'appointment.records_full_description', key: 'records_full_description', sortable: false},
-  {title: 'appointment.blockchain_transaction', key: 'transaction_hash', sortable: false},
-  {title: 'appointment.transaction_check_string', key: 'transaction_check_string', sortable: false},
+  {title: t('service.service_title'), key: 'service.title', sortable: false},
+  {title: t('appointment.current_mileage'), key: 'current_mileage', sortable: false},
+  {title: t('appointment.completed_at'), key: 'completed_at', sortable: false},
+  {title: t('appointment.records'), key: 'records_short_description', sortable: false},
+  {title: t('appointment.records_full_description'), key: 'records_full_description', sortable: false},
+  {title: t('appointment.blockchain_transaction'), key: 'transaction_hash', sortable: false},
+  {title: t('appointment.transaction_check_string'), key: 'transaction_check_string', sortable: false},
+  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end' },
 ])
 
-function generateCheckHashString(appointment) {
+function generateCheckHashString(appointment: Appointment & {records: Record[], car: Car}) {
   const countRecords = appointment.records.length;
   let hash = `${appointment.car.vin}_${appointment.current_mileage}_${appointment.completed_at}_${countRecords}`;
   appointment.records.forEach((record) => {
@@ -102,6 +117,15 @@ function copyCheckString(item: Partial<Appointment>, event: any) {
   setTimeout(() => {
     tooltipSpan.innerText = tooltipText;
   }, 2000);
+}
+
+function writeReview(appointmentId: number) {
+  actionItemId.value = appointmentId
+  showReviewDialog.value = true
+}
+
+function closeReviewDialog() {
+  showReviewDialog.value = false
 }
 
 </script>

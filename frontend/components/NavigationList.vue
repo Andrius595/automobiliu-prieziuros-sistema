@@ -42,6 +42,8 @@ const list = computed(() => {
       {title: 'navigation.users_list', to: '/users'},
       {title: 'navigation.services_list', to: '/services'},
       {title: 'navigation.cars_list', to: '/cars'},
+      {title: 'navigation.cities_list', to: '/cities'},
+      {title: 'navigation.service_categories_list', to: '/service-categories'},
     ]
   } else {
     return []

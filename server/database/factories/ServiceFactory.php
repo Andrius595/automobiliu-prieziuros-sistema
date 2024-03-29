@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\City;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class ServiceFactory extends Factory
      */
     public function definition(): array
     {
+        $city = City::inRandomOrder()->first() ?? City::factory()->create();
         return [
             'title' => $this->faker->company(),
+            'address' => $this->faker->address,
+            'description' => $this->faker->text,
+            'city_id' => $city->id,
         ];
     }
 }

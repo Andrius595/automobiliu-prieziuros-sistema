@@ -18,9 +18,9 @@
           </v-btn>
         </template>
       </v-snackbar>
-      <VSonner position="top-right" style="min-width: 344px!important;" />
+      <VSonner position="top-right" />
     </ClientOnly>
-    <v-navigation-drawer v-model="drawer" border="primary thick opacity-1">
+    <v-navigation-drawer :model-value="isSidebarOpen" border="primary thick opacity-1" @update:model-value="(val) => setSidebarValue(val)">
       <template v-slot:prepend>
         <div class="bg-primary d-flex align-center justify-center" style="height:64px">
           <h1>{{ $t('common.aps') }}</h1>
@@ -38,7 +38,7 @@
     </v-navigation-drawer>
 
     <v-app-bar color="primary">
-      <v-btn @click="drawer=!drawer"><v-icon>mdi-menu</v-icon></v-btn>
+      <v-btn @click="toggleSidebar"><v-icon>mdi-menu</v-icon></v-btn>
     </v-app-bar>
     <v-main class="align-center justify-centersw" style="min-height: 300px">
       <slot />
@@ -53,9 +53,11 @@ import NavigationList from '@/components/NavigationList.vue';
 import { useSnackbar } from '@/composables/useSnackbar';
 import {useAuth} from "~/composables/useAuth";
 import {VSonner} from "vuetify-sonner";
+import {useLayoutSidebar} from "~/composables/useLayoutSidebar";
 
 const showSnackbar = computed(() => useSnackbar().isVisible())
 const snackbarMessage = computed(() => useSnackbar().getMessage())
+const { isSidebarOpen, toggleSidebar, setSidebarValue } = useLayoutSidebar()
 function hideSnackbar() {
   useSnackbar().hide()
 }

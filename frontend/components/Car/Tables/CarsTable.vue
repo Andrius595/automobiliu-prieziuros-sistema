@@ -18,7 +18,8 @@
         <v-divider />
       </template>
       <template v-slot:item.owner="{ item }">
-        <span>{{ item.owner.first_name + ' ' + item.owner.last_name }}</span>
+        <span v-if="item.owner">{{ item.owner.first_name + ' ' + item.owner.last_name }}</span>
+        <span v-else>-</span>
       </template>
       <template v-slot:item.actions="{ item }">
         <div class="d-flex flex-nowrap justify-end">

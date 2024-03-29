@@ -27,6 +27,7 @@ export default defineNuxtConfig({
     public: {
       appUrl: process.env.AUTH_ORIGIN || 'http://localhost:3000',
       apiURL: process.env.BACKEND_API_URL || 'http://localhost/api',
+      storageURL: process.env.STORAGE_URL || 'http://localhost/storage/',
       jwtTTL: ((process.env.JWT_TTL as number|undefined) || 60) * 60,
       jwtRefreshTTL: ((process.env.JWT_REFRESH_TTL as number|undefined) || 60*24*7) * 60,
     }

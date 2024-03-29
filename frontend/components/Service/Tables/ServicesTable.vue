@@ -17,23 +17,10 @@
         </div>
         <v-divider />
       </template>
-      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-        <tr>
-          <template v-for="column in columns" :key="column.key">
-            <th :class="{'text-end': column.align === 'end'}">
-              <span class="mr-2" :class="{'cursor-pointer': column.sortable}" @click="() => column.sortable ? toggleSort(column) : false">{{ $t(column.title) }}</span>
-              <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)"></v-icon>
-              </template>
-            </th>
-          </template>
-        </tr>
-      </template>
       <template #item.actions="{ item }">
         <div class="d-flex justify-end gap-x-2">
-          <v-btn color="primary" :to="'/services/'+item.id">
-            <v-icon icon="mdi-eye text-white" size="x-large" />
-          </v-btn>
+          <NuxtLink :to="'/services/'+item.id+'/edit-information'"><v-icon icon="mdi-pencil text-secondary" /></NuxtLink>
+          <NuxtLink :to="'/services/'+item.id"><v-icon icon="mdi-eye text-primary" /></NuxtLink>
         </div>
       </template>
     </v-data-table-server>
@@ -44,20 +31,19 @@
 <script setup lang="ts">
 import {type PaginatedResponse} from "~/types/Responses";
 import backFetch from "~/utils/backFetch";
-import type {Appointment} from "~/types/Appointment";
-import ConfirmRegistrationDialog from "~/components/Service/Dialogs/ConfirmRegistrationDialog.vue";
 import type {Service} from "~/types/Service";
 import type {DatatablesOptions} from "~/types/DataTable";
 import CreateServiceDialog from "~/components/Service/Dialogs/CreateServiceDialog.vue";
 
+const { t } = useI18n()
 const itemsPerPage = ref(5)
 const headers = ref([
-  {title: 'service.title', key: 'title'},
-  {title: 'service.description', key: 'description'},
-  {title: 'Actions', key: 'actions', sortable: false, align: 'end', width: '6%'},
+  {title: t('service.title'), key: 'title'},
+  {title: t('service.description'), key: 'description'},
+  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end', width: '6%'},
 ])
 const totalItems = ref(0)
-const serverItems = ref<Appointment[]>([])
+const serverItems = ref<Service[]>([])
 const loading = ref(true)
 
 const showCreateDialog = ref(false)

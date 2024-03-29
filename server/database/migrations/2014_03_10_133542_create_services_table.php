@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('services', static function (Blueprint $table) {
             $table->id();
+            $table->foreignId('city_id')->constrained();
             $table->string('logo_path')->nullable();
+            $table->string('address');
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamps();

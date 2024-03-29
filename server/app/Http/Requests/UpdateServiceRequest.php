@@ -25,8 +25,12 @@ class UpdateServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'title' => ['nullable', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'image.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'service_categories_ids' => ['nullable', 'array'],
+            'service_categories_ids.*' => ['integer', 'exists:service_categories,id'],
+            'city_id' => ['required', 'integer', 'exists:cities,id'],
         ];
     }
 }

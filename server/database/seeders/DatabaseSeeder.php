@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Config\PermissionsConfig;
 use App\Models\Appointment;
 use App\Models\Car;
+use App\Models\City;
 use App\Models\Record;
 use App\Models\Service;
 use App\Models\User;
@@ -44,8 +45,13 @@ class DatabaseSeeder extends Seeder
         $serviceEmployee->syncPermissions($permissions);
 
 
+        $kaunas = City::create([
+            'name' => 'Kaunas',
+        ]);
         $service = Service::create([
             'title' => 'Test Service',
+            'address' => 'Test address',
+            'city_id' => $kaunas->id,
         ]);
 
 
