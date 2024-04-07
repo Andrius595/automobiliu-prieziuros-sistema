@@ -31,20 +31,29 @@ function closeDialog() {
   emit('close')
 }
 
-function confirmReview() {
-  backFetch('/appointments/'+props.appointmentId+'/write-review', {
-    method: 'DELETE',
+async function confirmReview() {
+  const body = {
+    rating: form.value.rating*2,
+    comment: form.value.comment,
+  }
+  const { error } = await backFetch('/appointments/'+props.appointmentId+'/write-review', {
+    method: 'post',
+    body,
     headers: {'Accept': 'application/json'},
-  }).then(() => {
-    emit('confirm')
-  }).catch((e) => {
-    console.error(e)
   })
+
+  if (error.value) {
+    console.error(error.value)
+
+    return
+  }
+
+  emit('confirm')
 }
 
 async function fetchReview() {
   const { data } = await backFetch<ServiceReview>('/appointments/' + props.appointmentId + '/review', {
-    method: 'GET',
+    method: 'get',
     headers: {'Accept': 'application/json'},
   })
 

@@ -54,6 +54,9 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::get('/{car}/history', [CarController::class, 'getCarHistory']);
         Route::get('/{car}/reminders', [ReminderController::class, 'getCarReminders']);
         Route::post('/{car}/reminders', [ReminderController::class, 'createCarReminder']);
+        Route::get('/{car}/public-urls', [CarController::class, 'getCarPublicUrls']);
+        Route::post('/{car}/share-history', [CarController::class, 'shareCarHistory']);
+        Route::delete('/{car}/delete-public-history', [CarController::class, 'deletePublicCarHistory']);
     });
 
     Route::apiResource('services', ServiceController::class);
@@ -83,8 +86,6 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('/', [UserController::class, 'getMyCars']);
             Route::delete('/{car}/remove', [UserController::class, 'removeCar']);
             Route::post('/{car}/share', [UserController::class, 'shareCar']);
-            Route::post('/{car}/share-history', [UserController::class, 'shareCarHistory']);
-            Route::delete('/{car}/delete-public-history/{slug}', [UserController::class, 'deletePublicCarHistory']);
             Route::post('/{car}/transfer', [UserController::class, 'transferCar']);
         });
     });

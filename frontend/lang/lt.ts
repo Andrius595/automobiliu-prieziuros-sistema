@@ -33,6 +33,7 @@ const lt = {
         share_car: 'Dalintis automobiliu',
         transfer_car: 'Perleisti automobilį',
         share_history: 'Dalintis istorija',
+        control_public_urls: 'Valdyti viešas nuorodas',
     },
     service: {
         registrations: {

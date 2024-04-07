@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -59,8 +60,8 @@ class User extends Authenticatable implements JWTSubject
         return ['roles' => $roles];
     }
 
-    public function cars()
+    public function cars(): BelongsToMany
     {
-        return $this->hasMany(Car::class, 'owner_id');
+        return $this->belongsToMany(Car::class, UserCar::class)->withTimestamps();
     }
 }

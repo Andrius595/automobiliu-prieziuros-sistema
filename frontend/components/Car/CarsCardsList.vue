@@ -50,7 +50,7 @@
       </template>
     </v-data-table-server>
     <UserRemoveCarDialog :car-id="carId" :visible="deleteDialogVisible" @close="deleteDialogVisible = false" @confirm="carRemoved" />
-    <EditCarDialog :edit-path="editPath" :car-id="carId" :visible="editDialogVisible" @close="editDialogVisible = false" @confirm="carEdited" />
+    <EditCarDialog :car-id="carId" :visible="editDialogVisible" @close="editDialogVisible = false" @confirm="carEdited" />
     <RegisterCarDialog :visible="createDialogVisible" @close="createDialogVisible = false" @confirm="carCreated" />
   </div>
 </template>
@@ -85,9 +85,6 @@ const deleteDialogVisible = ref(false)
 const editDialogVisible = ref(false)
 const createDialogVisible = ref(false)
 const carId = ref<number|undefined>(undefined)
-
-const deletePath = computed(() => '/users/'+props.userId+'/cars')
-const editPath = computed(() => '/users/'+props.userId+'/cars/')
 
 async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerPage: number, sortBy: { key: string, order: 'asc'|'desc'}[] }) {
   loading.value = true

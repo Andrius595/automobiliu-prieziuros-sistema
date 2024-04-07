@@ -9,10 +9,8 @@ class WriteReviewRequest extends FormRequest
     public function authorize(): bool
     {
         $appointment = $this->route('appointment');
-        $userId = $this->user()->id;
-        $ownerId = $appointment->car->owner_id;
 
-        return $userId === $ownerId;
+        return $appointment->car->belongsToUserById($this->user()->id);
     }
 
 

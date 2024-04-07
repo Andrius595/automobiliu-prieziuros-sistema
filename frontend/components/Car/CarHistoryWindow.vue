@@ -1,24 +1,14 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
-import { type Car } from '~/types/Car';
 import type {Appointment} from "~/types/Appointment";
 import CarHistoryTable from "~/components/Car/Tables/CarHistoryTable.vue";
-import {useJWT} from "~/composables/useJWT";
-import ShareHistoryDialog from "~/components/Car/Dialogs/ShareHistoryDialog.vue";
 
 const props = defineProps({
   carId: {
     type: Number,
     required: true,
   },
-  canShareHistory: {
-    type: Boolean,
-    required: false,
-    default: false,
-  }
 })
-
-const showShareDialog = ref(false)
 
 
 const appointments = ref<Partial<Appointment>[]>([])
@@ -40,16 +30,10 @@ async function fetchCarInformation(carId: number) {
     appointments.value = data.value
   }
 }
-
-function closeShareDialog() {
-  showShareDialog.value = false
-}
 </script>
 
 <template>
   <div>
-    <div v-if="canShareHistory">
-    </div>
     <v-container>
       <v-row>
         <v-col>

@@ -17,15 +17,18 @@ function closeDialog() {
   emit('close')
 }
 
-function confirmDelete() {
-  backFetch('/service/appointments/'+props.appointmentId+'/complete', {
+async function confirmComplete() {
+  const { error } = await backFetch('/service/appointments/'+props.appointmentId+'/complete', {
     method: 'post',
-    headers: {'Accept': 'application/json'},
-  }).then(() => {
-    emit('confirm')
-  }).catch((e) => {
-    console.error(e)
   })
+
+  if (error.value) {
+    console.error(error.value)
+
+    return
+  }
+
+  emit('confirm')
 }
 </script>
 
@@ -38,8 +41,8 @@ function confirmDelete() {
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>
-      <v-btn color="grey darken-1" text @click="closeDialog">{{ $t('common.cancel') }}</v-btn>
-      <v-btn color="success darken-1" text @click="confirmDelete">{{ $t('common.confirm') }}</v-btn>
+      <v-btn color="grey-darken-1" variant="text" @click="closeDialog">{{ $t('common.cancel') }}</v-btn>
+      <v-btn color="success" variant="tonal" @click="confirmComplete">{{ $t('common.confirm') }}</v-btn>
     </v-card-actions>
   </v-card>
 </v-dialog>

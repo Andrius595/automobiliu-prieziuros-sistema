@@ -12,7 +12,13 @@ class CreateNewCar extends CreatesNewRecord
     {
         $this->validate($input);
 
-        return Car::create($input);
+        $car = Car::create($input);
+
+        if ($input['owner_id']) {
+            $car->users()->attach($input['owner_id']);
+        }
+
+        return $car;
     }
 
     public function rules($input): array

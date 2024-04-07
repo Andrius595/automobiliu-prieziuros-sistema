@@ -2,6 +2,9 @@
 import backFetch from "~/utils/backFetch";
 import { type Car } from '~/types/Car'
 
+const { errorToast, successToast } = useToast()
+const { t } = useI18n()
+
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
   visible: {
@@ -12,11 +15,6 @@ const props = defineProps({
     type: Number,
     required: false,
   },
-  editPath: {
-    type: String,
-    required: false,
-    default: '/cars/',
-  }
 })
 
 const errors = ref([])
@@ -55,20 +53,20 @@ async function confirmEdit() {
   const { data, error } = await backFetch('/cars/' + props.carId, {
     method: 'put',
     body: car.value,
-    headers: {'Accept': 'application/json'},
   })
 
   if (error.value) {
     errors.value = error.value.data.errors
     errorToast(error.value.data.message)
-    console.error(error)
+
     return
   }
 
   if (data.value) {
     car.value = data.value
+    successToast(t('car.updated_successfully'))
+    emit('confirm')
   }
-
 }
 </script>
 

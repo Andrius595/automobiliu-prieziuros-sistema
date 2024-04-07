@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Car\CreateNewCar;
+use App\Actions\Car\DeletePublicCarHistory;
 use App\Actions\Car\ListCars;
+use App\Actions\Car\RemoveCarFromUser;
 use App\Actions\Car\ShareCar;
 use App\Actions\Car\ShareCarHistory;
 use App\Actions\Car\TransferCar;
@@ -11,6 +13,9 @@ use App\Actions\Car\UpdateCar;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\User\ListUsers;
 use App\Config\PermissionsConfig;
+use App\Http\Requests\RemoveCarFromUserRequest;
+use App\Http\Requests\ShareCarHistoryRequest;
+use App\Http\Requests\ShareCarRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\Car;
 use App\Models\User;
@@ -104,33 +109,26 @@ class UserController extends Controller
             'sortBy',
             'sortDirection',
         ]);
-        $searchParams['owner_id'] = Auth::id();
+        $searchParams['user_id'] = Auth::id();
         $cars = $listCars->list($searchParams, $perPage, $sortParams);
+
 
         return response()->json($cars);
     }
 
-    public function removeCar(Car $car, UpdateCar $updateCar): JsonResponse
+    public function removeCar(RemoveCarFromUserRequest $request, Car $car, RemoveCarFromUser $removeCarFromUser): JsonResponse
     {
-        $data = [
-            'owner_id' => null,
-            'owner_confirmed_at' => null,
-        ];
-
-        $updateCar->update($car, $data);
+        $removeCarFromUser->remove($car, Auth::id());
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
     }
 
-    public function shareCar(Request $request, Car $car, ShareCar $shareCar): JsonResponse
+    public function shareCar(ShareCarRequest $request, Car $car, ShareCar $shareCar): JsonResponse
     {
-        $user = Auth::user();
         $email = $request->input('email');
-        if (($user->id !== $car->owner_id && !$user->hasRole(PermissionsConfig::SYSTEM_ADMIN_ROLE))
-            || $car->owner->email === $request->input('email')
-        ) {
+        if ($car->users()->where('email', $email)->exists()){
             return response()->json([
-                'message' => 'Negalite atlikti šio veiksmo.'
+                'message' => trans('resources.user_already_has_access_to_this_car')
             ], Response::HTTP_FORBIDDEN);
         }
 
@@ -154,24 +152,5 @@ class UserController extends Controller
         $transferCar->transfer($car, $email);
 
         return response()->json(null, Response::HTTP_NO_CONTENT);
-    }
-
-    public function shareCarHistory(Car $car, ShareCarHistory $shareCarHistory): JsonResponse
-    {
-        $user = Auth::user();
-        if ($user->id !== $car->owner_id && !$user->hasRole(PermissionsConfig::SYSTEM_ADMIN_ROLE)) {
-            return response()->json([
-                'message' => 'Negalite atlikti šio veiksmo.'
-            ], Response::HTTP_FORBIDDEN);
-        }
-
-        $publicHistory = $shareCarHistory->share($car);
-
-        return response()->json($publicHistory, Response::HTTP_CREATED);
-    }
-
-    public function deletePublicCarHistory()
-    {
-
     }
 }

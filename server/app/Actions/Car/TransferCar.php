@@ -9,21 +9,23 @@ use Illuminate\Support\Facades\DB;
 
 class TransferCar
 {
+    public function __construct(private readonly UpdateCar $updateCar)
+    {
+    }
+
     public function transfer(Car $car, string $email): bool
     {
-        $updateCar = new UpdateCar();
         $otherUser = User::where('email', $email)->firstOrFail();
         $data = [
             'owner_id' => $otherUser->id,
             'owner_confirmed_at' => null,
         ];
 
-        DB::table('cars_users')
-            ->where('car_id', $car->id)
-            ->delete();
+        $car->users()->detach();
+
         PublicCarHistory::where('car_id', $car->id)->delete();
 
-        return $updateCar->update($car, $data);
+        return $this->updateCar->update($car, $data);
     }
 
 }

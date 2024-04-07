@@ -4,6 +4,7 @@ namespace App\Actions\Car;
 
 use App\Actions\ListsRecords;
 use App\Models\Car;
+use Illuminate\Support\Facades\Auth;
 
 class ListCars extends ListsRecords
 {
@@ -14,6 +15,10 @@ class ListCars extends ListsRecords
         foreach ($searchParams as $key => $searchParam) {
             match ($key) {
                 'owner_id' => $this->query->where('owner_id', $searchParam),
+                'user_id' => $this->query->where('owner_id', $searchParam)
+                    ->orWhereHas('users', function ($q) use ($searchParam) {
+                        $q->where('id', $searchParam);
+                }),
                 'owner_first_name' => $this->query->whereHas('owner', function ($q) use ($searchParam) {
                     $q->where('first_name', 'like', "%$searchParam%");
                 }),

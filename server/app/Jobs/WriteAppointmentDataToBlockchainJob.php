@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Appointment;
 use App\Services\LambdaService;
+use Aws\Lambda\LambdaClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -14,19 +15,24 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    cupublic function __construct(
+    private LambdaClient $client;
+
+    public function __construct(
         private readonly Appointment   $appointment,
     )
     {
+        $this->client = new LambdaClient([
+            'region' => env('AWS_DEFAULT_REGION'),
+            'version' => 'latest',
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ],
+        ]);
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(): void
     {
-        $lambdaService = new LambdaService();
-
         $appointment = $this->appointment;
 
         $car = $appointment->car;
@@ -40,14 +46,13 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 
         $hashed = hash('sha256', $hash_string);
 
-        // TODO dispatch this in the background
-        $awsResults = $lambdaService->invoke([
+        $awsResults = $this->client->invoke([
             'FunctionName' => 'sendTransactionTest',
             'Payload' => json_encode(['hash' => $hashed]),
         ]);
 
-        $results = json_decode($awsResults->get('Payload')->getContents(), true);
+        $results = json_decode($awsResults->get('Payload')?->getContents() ?? '{}', true, 512, JSON_THROW_ON_ERROR);
 
-        $appointment->update(['transaction_hash' => $results['body']['txHash']]);
+        $appointment->update(['transaction_hash' => $results['body']['txHash'] ?? null]);
     }
 }

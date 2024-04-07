@@ -2,7 +2,7 @@
 import { type Car } from '~/types/Car';
 import TransferCarDialog from "~/components/Car/Dialogs/TransferCarDialog.vue";
 import ShareCarDialog from "~/components/Car/Dialogs/ShareCarDialog.vue";
-import ShareHistoryDialog from "~/components/Car/Dialogs/ShareHistoryDialog.vue";
+import ControlPublicHistoryDialog from "~/components/Car/Dialogs/ControlPublicHistoryDialog.vue";
 
 const props = defineProps({
   car: {
@@ -45,7 +45,7 @@ function closeShareHistoryDialog() {
     <div class="d-flex justify-end">
       <v-btn color="primary" @click="showShareDialog = true">{{ $t('car.share_car') }}</v-btn>
       <v-btn color="primary" class="ml-4" @click="showTransferDialog = true">{{ $t('car.transfer_car') }}</v-btn>
-      <v-btn color="primary" class="ml-4" @click="showShareHistoryDialog = true">{{ $t('car.share_history') }}</v-btn>
+      <v-btn color="primary" class="ml-4" @click="showShareHistoryDialog = true">{{ $t('car.control_public_urls') }}</v-btn>
     </div>
     <div>
       <v-list>
@@ -60,7 +60,7 @@ function closeShareHistoryDialog() {
       </v-list>
       <TransferCarDialog :car-id="car.id" :visible="showTransferDialog" @confirm="carTransferred" @close="closeTransferDialog" />
       <ShareCarDialog :car-id="car.id" :visible="showShareDialog" @confirm="carShared" @close="closeShareDialog" />
-      <ShareHistoryDialog :visible="showShareHistoryDialog" :car-id="car.id" @confirm="historyShared" @close="closeShareHistoryDialog" />
+      <ControlPublicHistoryDialog :visible="showShareHistoryDialog" :car-id="car.id" @confirm="historyShared" @close="closeShareHistoryDialog" />
     </div>
   </div>
 </template>
