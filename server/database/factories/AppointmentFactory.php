@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Car;
+use App\Models\Service;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,15 +11,30 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class AppointmentFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $car = Car::inRandomOrder()->first() ?? Car::factory()->create();
+        $service = Service::inRandomOrder()->first() ?? Service::factory()->create();
+
         return [
-            //
+            'car_id' => $car->id,
+            'service_id' => $service->id,
+            'current_mileage' => $this->faker->numberBetween(1000, 300000),
+            'mileage_type' => $this->faker->randomElement([Car::MILEAGE_TYPE_KILOMETERS, Car::MILEAGE_TYPE_MILES]),
         ];
+    }
+
+    public function confirmed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'confirmed_at' => now(),
+        ]);
+    }
+
+    public function completed(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'completed_at' => now(),
+        ]);
     }
 }

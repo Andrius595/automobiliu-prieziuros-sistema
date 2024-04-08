@@ -37,11 +37,6 @@ class CarController extends Controller
         return response()->json($cars);
     }
 
-    public function store(StoreCarRequest $request)
-    {
-        throw new NotImplementedException();
-    }
-
     public function show(Car $car): JsonResponse
     {
         $user = Auth::user();
@@ -76,12 +71,12 @@ class CarController extends Controller
     {
         $car->load(['completedAppointments.records', 'completedAppointments.service', 'completedAppointments.car']);
 
-        return response()->json($car->completedAppointments);
+        return response()->json($car->completedAppointments ?? []);
     }
 
     public function getCarPublicUrls(Car $car): JsonResponse
     {
-        $urls = $car->publicCarHistories;
+        $urls = $car->publicCarHistories ?? [];
 
         return response()->json($urls);
     }

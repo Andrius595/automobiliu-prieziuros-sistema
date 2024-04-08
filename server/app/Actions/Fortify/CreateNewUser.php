@@ -21,10 +21,10 @@ class CreateNewUser extends CreatesNewRecord
             'first_name' => $input['first_name'],
             'last_name' => $input['last_name'],
             'email' => $input['email'],
-            'password' => 'not_set',
+            'password' => $input['password'] ? Hash::make($input['password']) : 'not_set',
         ]);
 
-        $user->assignRole($input['role']);
+        $user->assignRole($input['role'] ?? PermissionsConfig::CLIENT_ROLE);
 
         return $user;
     }

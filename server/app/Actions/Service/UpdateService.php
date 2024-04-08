@@ -26,7 +26,7 @@ class UpdateService extends UpdatesRecord
         $this->validate($data, $record);
 
         /** @var Service $record */
-        $record->service_categories()->sync($data['service_categories_ids']);
+        $record->service_categories()->sync($data['service_categories_ids'] ?? []);
 
         return $record->update($data);
     }

@@ -13,7 +13,7 @@ class CreateNewReminder extends CreatesNewRecord
 {
     public string $model = Reminder::class;
 
-    public function create(array $input): bool
+    public function create(array $input): Reminder|null
     {
         if (!isset($input['last_reminded_at'])) {
             $input['last_reminded_at'] = now();

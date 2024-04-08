@@ -4,6 +4,7 @@ namespace App\Actions\Fortify;
 
 use Illuminate\Validation\Rules\Password;
 
+/** @codeCoverageIgnore */
 trait PasswordValidationRules
 {
     /**

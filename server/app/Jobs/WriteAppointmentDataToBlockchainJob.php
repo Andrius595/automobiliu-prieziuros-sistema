@@ -3,7 +3,6 @@
 namespace App\Jobs;
 
 use App\Models\Appointment;
-use App\Services\LambdaService;
 use Aws\Lambda\LambdaClient;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

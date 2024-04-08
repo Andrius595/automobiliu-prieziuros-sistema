@@ -40,7 +40,7 @@ class UserController extends Controller
             'sortBy',
             'sortDirection',
         ]);
-        $searchParams['role'] = [PermissionsConfig::CLIENT_ROLE, PermissionsConfig::SYSTEM_ADMIN_ROLE];
+        $searchParams['roles'] = [PermissionsConfig::CLIENT_ROLE, PermissionsConfig::SYSTEM_ADMIN_ROLE];
         $users = $listUsers->list($searchParams, $perPage, $sortParams, ['roles']);
 
         return response()->json($users);

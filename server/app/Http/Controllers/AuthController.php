@@ -51,9 +51,11 @@ class AuthController extends Controller
 
     public function register(Request $request, CreateNewUser $createNewUser): JsonResponse
     {
-        $user = $createNewUser->create($request->all());
-
-        $user->assignRole(PermissionsConfig::CLIENT_ROLE);
+        $data = [
+            ...$request->all(),
+            'role' => PermissionsConfig::CLIENT_ROLE,
+        ];
+        $user = $createNewUser->create();
 
         event(new Registered($user));
 

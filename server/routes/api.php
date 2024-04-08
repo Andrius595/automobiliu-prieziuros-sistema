@@ -5,7 +5,6 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CityController;
 use App\Http\Controllers\PublicCarHistoryController;
-use App\Http\Controllers\RecordController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\ServiceController;
@@ -53,7 +52,7 @@ Route::group(['middleware' => 'auth:api'], function () {
         Route::delete('/reminders/{reminder}', [ReminderController::class, 'destroy']);
         Route::get('/{car}/history', [CarController::class, 'getCarHistory']);
         Route::get('/{car}/reminders', [ReminderController::class, 'getCarReminders']);
-        Route::post('/{car}/reminders', [ReminderController::class, 'createCarReminder']);
+        Route::post('/{car}/reminders', [ReminderController::class, 'store']);
         Route::get('/{car}/public-urls', [CarController::class, 'getCarPublicUrls']);
         Route::post('/{car}/share-history', [CarController::class, 'shareCarHistory']);
         Route::delete('/{car}/delete-public-history', [CarController::class, 'deletePublicCarHistory']);
@@ -73,7 +72,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/write-review', [AppointmentController::class, 'writeReview']);
     Route::post('appointments/{appointment}/review', [AppointmentController::class, 'getReview']);
-    Route::apiResource('records', RecordController::class);
     Route::group(['prefix' => 'users'], function() {
         Route::get('list-for-select', [UserController::class, 'indexForSelect']);
     });

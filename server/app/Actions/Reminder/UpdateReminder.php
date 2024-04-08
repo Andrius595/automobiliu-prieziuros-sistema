@@ -21,7 +21,7 @@ class UpdateReminder extends UpdatesRecord
                 Reminder::TYPE_WEEKS. ','.
                 Reminder::TYPE_MONTHS. ','.
                 Reminder::TYPE_YEARS],
-            'last_reminded_at' => ['required', 'date'],
+            'last_reminded_at' => ['sometimes', 'date'],
         ];
     }
 }

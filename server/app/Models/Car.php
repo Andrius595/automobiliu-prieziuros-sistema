@@ -46,4 +46,9 @@ class Car extends Model
     {
         return $this->hasMany(PublicCarHistory::class);
     }
+
+    public function reminders(): HasMany
+    {
+        return $this->hasMany(Reminder::class);
+    }
 }

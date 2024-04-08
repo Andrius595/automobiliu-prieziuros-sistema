@@ -14,14 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReminderController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
     public function store(Request $request, Car $car, CreateNewReminder $newReminder): JsonResponse
     {
         $request->merge([

@@ -16,7 +16,7 @@ abstract class ListsRecords
         $this->query = $this->model::query();
     }
 
-    public function list(array $searchParams = [], int $perPage = 10,  $sortParams = [], $relations = []): LengthAwarePaginator
+    public function list(array $searchParams = [], ?int $perPage = 10, $sortParams = [], $relations = []): LengthAwarePaginator
     {
         if (!empty($relations)) {
             $this->query->with($relations);

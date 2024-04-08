@@ -19,10 +19,7 @@ class ListUsers extends ListsRecords
         }
         foreach ($searchParams as $key => $searchParam) {
             match($key) {
-                'role' => $this->query->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
-                    ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.*')
-                    ->whereIn('roles.name', $searchParam),
+                'roles' => $this->query->whereHas('roles', fn($query) => $query->where('name', 'LIKE', "%$searchParam%")),
                 'service_id' => $this->query->where('service_id', $searchParam),
                 default => $this->query->where($key, 'like', "%$searchParam%"),
             };
@@ -37,10 +34,10 @@ class ListUsers extends ListsRecords
             match ($sortParams['sortBy']) {
                 'roles' => $this->query->join('model_has_roles', 'users.id', '=', 'model_has_roles.model_id')
                     ->join('roles', 'model_has_roles.role_id', '=', 'roles.id')
-                    ->select('users.*')
                     ->orderBy('roles.name', $sortParams['sortDirection'] ?? 'asc'),
                 default => $this->query->orderBy($sortParams['sortBy'], $sortParams['sortDirection'] ?? 'asc'),
-            };        }
+            };
+        }
 
         return $this;
     }

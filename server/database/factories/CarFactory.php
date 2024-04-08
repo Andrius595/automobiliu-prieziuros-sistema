@@ -20,7 +20,7 @@ class CarFactory extends Factory
     {
         $makes = ['Audi', 'Seat', 'Volkswagen', 'Volvo', 'Ford'];
         $models = ['A4', 'Leon', 'Golf', 'XC90', 'Focus'];
-        $owner = User::inRandomOrder()->first();
+        $owner = User::inRandomOrder()->first() ?? User::factory()->create();
 
         return [
             'owner_id' => $owner->id,

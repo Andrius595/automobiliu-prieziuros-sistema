@@ -306,7 +306,7 @@ class ServiceController extends Controller
         $appointment = $newAppointment->create([
             'service_id' => $service->id,
             'car_id' => $car->id,
-            'current_mileage' => $car->appointments()->whereNotNull('completed_at')->orderBy('completed_at', 'desc')->first()->current_mileage ?? 0,
+            'current_mileage' => $car->appointments()->whereNotNull('completed_at')->orderBy('completed_at', 'desc')->first()->current_mileage ?? 1,
             'mileage_type' => $car->mileage_type,
         ]);
 

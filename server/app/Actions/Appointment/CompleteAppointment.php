@@ -4,7 +4,6 @@ namespace App\Actions\Appointment;
 
 use App\Jobs\WriteAppointmentDataToBlockchainJob;
 use App\Models\Appointment;
-use App\Services\LambdaService;
 
 class CompleteAppointment
 {

@@ -16,7 +16,6 @@ class RemoveCarFromUser
         if ($car->owner_id === $user_id) {
             $data = [
                 'owner_id' => null,
-                'owner_confirmed_at' => null,
             ];
             $this->updateCar->update($car, $data);
             $car->users()->detach();

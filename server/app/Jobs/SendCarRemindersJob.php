@@ -61,6 +61,9 @@ class SendCarRemindersJob implements ShouldQueue
                 $shouldSendReminder = true;
             }
         } elseif ($reminder->type === Reminder::TYPE_MILEAGE) {
+            if ($reminder->car->appointments()->count() < 2) {
+                return false;
+            }
             $first_appointment = $reminder->car->appointments()->oldest()->first();
             $latest_appointment = $reminder->car->appointments()->latest()->first();
             $mileage_difference = $latest_appointment->current_mileage - $first_appointment->current_mileage;
