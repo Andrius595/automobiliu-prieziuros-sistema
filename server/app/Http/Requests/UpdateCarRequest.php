@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Config\PermissionsConfig;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCarRequest extends FormRequest
 {
@@ -23,11 +24,15 @@ class UpdateCarRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'make' => 'required|string',
-            'model' => 'required|string',
-            'year_of_manufacture' => 'required|integer:min:1900|max:' . (now()->addYear()->format('Y')),
-            'mileage_type' => 'required|integer|in:0,1',
-            'plate_no' => 'required|string',
+            'make' => ['sometimes', 'string', 'max:255'],
+            'model' => ['sometimes', 'string', 'max:255'],
+            'year_of_manufacture' => ['sometimes', 'integer', 'min:1900', 'max:' . (now()->addYear()->format('Y'))],
+            'mileage_type' => ['sometimes', 'integer', 'in:0,1'],
+            'vin' => ['sometimes', 'string', 'max:255', Rule::unique('cars')->ignore($this->car)],
+            'plate_no' => ['sometimes', 'string', 'max:255'],
+            'color' => ['sometimes', 'string', 'max:255'],
+            'owner_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
+            'owner_confirmed_at' => ['sometimes', 'nullable', 'date'],
         ];
     }
 }

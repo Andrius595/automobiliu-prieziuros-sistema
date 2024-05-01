@@ -59,16 +59,6 @@ async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerP
     headers: {'Accept': 'application/json'},
   })
 
-  console.log('data', response)
-
-
-
-  // const {data} = await backFetch('/services/' + props.serviceId + '/cars', {
-  //   method: 'GET',
-  //   query,
-  //   headers: {'Accept': 'application/json'},
-  // })
-
   serverItems.value = response.data
   totalItems.value = response.total
   loading.value = false

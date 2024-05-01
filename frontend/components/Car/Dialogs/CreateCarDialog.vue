@@ -45,7 +45,6 @@ function closeDialog() {
 }
 
 async function confirmCreate() {
-  console.log('confirmCreate')
   car.value.vin = vin.value
   const { data, error } = await backFetch<Car>(props.createPath, {
     method: 'post',
@@ -138,7 +137,7 @@ async function loadOwners() {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click.prevent="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click.once="confirmCreate">Create</v-btn>
+        <v-btn color="blue darken-1" text @click.prevent="confirmCreate">Create</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

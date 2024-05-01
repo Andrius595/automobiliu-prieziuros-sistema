@@ -10,9 +10,13 @@ export const useAuth = () => {
     }
 
     const fetchUser = async () => {
-        const { data } = await backFetch<UserSession|null>('/auth/user', {method: 'get', headers: {Accept: 'application/json'}})
+        try {
+            const { data } = await backFetch<UserSession|null>('/auth/user', {method: 'get', headers: {Accept: 'application/json'}})
 
-        return data.value
+            return data.value
+        } catch (e) {
+            return null;
+        }
     }
 
     const getUser = async (forceFetch = false): Promise<UserSession|null> => {

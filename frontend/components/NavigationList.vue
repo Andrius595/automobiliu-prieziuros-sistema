@@ -9,25 +9,30 @@
 <script setup lang="ts">
 import {useRoles} from "~/composables/useRoles";
 import type {UserSession} from "~/types/userSession";
-const { isClient, isServiceEmployee, isServiceAdmin, isSystemAdmin } = useRoles()
+const { hasClientRole, hasServiceEmployeeRole, hasServiceAdminRole, hasSystemAdminRole } = useRoles()
 const auth = useAuth()
 const user = await auth.getUser() as UserSession
 
+const isClient = await hasClientRole()
+const isServiceEmployee = await hasServiceEmployeeRole()
+const isServiceAdmin = await hasServiceAdminRole()
+const isSystemAdmin = await hasSystemAdminRole()
+
 
 const list = computed(() => {
-  if (isClient.value) {
+  if (isClient) {
     return [
       {title: 'navigation.cars_list', to: '/cars'},
       {title: 'navigation.services_list', to: '/services'},
     ]
-  } else if (isServiceEmployee.value) {
+  } else if (isServiceEmployee) {
     return [
       {title: 'navigation.services.new_appointment', to: '/services/create-appointment'},
       {title: 'navigation.services.registrations_list', to: '/services/registrations'},
       {title: 'navigation.services.active_appointments', to: '/services/active-appointments'},
       {title: 'navigation.services.completed_appointments', to: '/services/completed-appointments'},
     ]
-  } else if (isServiceAdmin.value) {
+  } else if (isServiceAdmin) {
     const serviceId = user.service_id
     return [
       {title: 'navigation.services.new_appointment', to: '/services/create-appointment'},
@@ -37,7 +42,7 @@ const list = computed(() => {
       {title: 'navigation.services.employees_list', to: '/services/'+serviceId+'/employees'},
       {title: 'navigation.services.edit_service_information', to: '/services/'+serviceId+'/edit-information'},
     ]
-  } else if (isSystemAdmin.value) {
+  } else if (isSystemAdmin) {
     return [
       {title: 'navigation.users_list', to: '/users'},
       {title: 'navigation.services_list', to: '/services'},

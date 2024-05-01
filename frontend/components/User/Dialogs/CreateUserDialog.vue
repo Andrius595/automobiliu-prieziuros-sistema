@@ -102,7 +102,7 @@ async function confirmCreate() {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click.prevent="closeDialog">{{ $t('common.cancel') }}</v-btn>
-        <v-btn color="success" variant="tonal" @click.once="confirmCreate">{{ $t('common.create') }}</v-btn>
+        <v-btn color="success" variant="tonal" @click.prevent="confirmCreate">{{ $t('common.create') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

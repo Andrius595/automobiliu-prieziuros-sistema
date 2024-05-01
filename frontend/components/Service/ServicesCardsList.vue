@@ -125,7 +125,6 @@ const actionItemId = ref<number|undefined>(undefined)
 await loadItems({page: 1, itemsPerPage: itemsPerPage.value, sortBy: []})
 
 async function loadItems({page, itemsPerPage, sortBy}: DatatablesOptions) {
-  console.log('loadItems', page, itemsPerPage, sortBy)
   loading.value = true
   const query = {
     perPage: -1,

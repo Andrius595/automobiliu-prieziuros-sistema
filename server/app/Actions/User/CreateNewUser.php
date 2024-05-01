@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Actions\Fortify;
+namespace App\Actions\User;
 
 use App\Actions\CreatesNewRecord;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Config\PermissionsConfig;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -10,8 +11,6 @@ use Illuminate\Validation\Rule;
 
 class CreateNewUser extends CreatesNewRecord
 {
-    use PasswordValidationRules;
-
     public string $model = User::class;
     public function create(array $input): User
     {
@@ -43,7 +42,6 @@ class CreateNewUser extends CreatesNewRecord
                 Rule::unique(User::class),
             ],
             'role' => ['required', Rule::in(PermissionsConfig::ROLES)],
-            'password' => $this->passwordRules(),
         ];
     }
 }

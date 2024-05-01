@@ -31,8 +31,6 @@ async function loadCars() {
     headers: {'Accept': 'application/json'},
   })
 
-  console.log('asd', data.value)
-
   if (data.value) {
     cars.value = data.value.data
     form.value.car_id = data.value.data[0].id

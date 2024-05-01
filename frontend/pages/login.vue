@@ -1,7 +1,7 @@
 <template>
   <v-container class="d-flex flex-column justify-center align-center flex-grow-1">
     <h1 class="mb-4 site-name text-h2 text-primary">{{ $t('common.aps_full')}}</h1>
-    <v-form v-model="valid" style="width: 50%" @submit.prevent="login">
+    <v-form style="width: 50%" @submit.prevent="login">
       <div>
         <v-row>
           <v-col
@@ -45,9 +45,10 @@
 </template>
 
 <script setup lang="ts">
-const valid = ref(false)
 const email = ref('')
 const password = ref('')
+
+const {errorToast} = useToast()
 
 
 definePageMeta({
@@ -56,17 +57,18 @@ definePageMeta({
 })
 
 async function login() {
-  if (valid.value) {
-    const response = await useFetch('/api/auth/login', {
+    $fetch('/api/auth/login', {
       method: 'POST',
       body: {
         email: email.value,
         password: password.value,
       },
+    }).then(async (res) => {
+      await navigateTo('/cars')
+    }).catch((error) => {
+        const errorMessage = error.data?.data?.message ?? 'Įvyko klaida'
+        errorToast(errorMessage)
     })
-
-    await navigateTo('/cars')
-  }
 }
 </script>
 

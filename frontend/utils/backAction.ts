@@ -1,10 +1,9 @@
 import {serialize} from "object-to-formdata";
-import {$fetch, type FetchOptions} from "ofetch";
+import {$fetch} from "ofetch";
 
-
-export default async (
-    route: string,
-    options: FetchOptions & {sendsFiles?: boolean}
+export default async <T>(
+    route: Parameters<typeof $fetch<T>>[0],
+    options: Parameters<typeof $fetch<T>>[1] & {sendsFiles?: boolean}
 ) =>
 {
     const jwt = useJWT()
@@ -31,5 +30,5 @@ export default async (
         }
     }
 
-    return $fetch(useRuntimeConfig().public.apiURL + route, options);
+    return $fetch<T>(useRuntimeConfig().public.apiURL + route, options);
 }

@@ -30,7 +30,7 @@ class AuthController extends Controller
         ]);
 
         if (!$token) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['message' => 'Neteisingas naudotojo vardas arba slaptažodis'], 401);
         }
 
         return response()->json(['token' => $token]);
@@ -41,7 +41,7 @@ class AuthController extends Controller
         $token = auth()->refresh();
 
         if (!$token) {
-            return response()->json(['error' => 'Refresh token already expired'], 401);
+            return response()->json(['message' => 'Atnaujinimo žetono galiojimo laikas pasibaigė, prisijunkite iš naujo.'], 401);
         }
 
         return response()->json([
@@ -55,7 +55,7 @@ class AuthController extends Controller
             ...$request->all(),
             'role' => PermissionsConfig::CLIENT_ROLE,
         ];
-        $user = $createNewUser->create();
+        $user = $createNewUser->create($data);
 
         event(new Registered($user));
 
@@ -73,7 +73,10 @@ class AuthController extends Controller
 
         return $status === Password::RESET_LINK_SENT
             ? response()->json(['status' => __($status)])
-            : response()->json(['errors' => ['email' => [__($status)]]], Response::HTTP_BAD_REQUEST);
+            : response()->json([
+                'errors' => ['email' => [__($status)]],
+                'message' => __($status),
+            ], Response::HTTP_BAD_REQUEST);
     }
 
     public function resetPassword(Request $request): JsonResponse
@@ -99,7 +102,10 @@ class AuthController extends Controller
 
         return $status === Password::PASSWORD_RESET
             ? response()->json(['status' => __($status)])
-            : response()->json(['errors' => ['email' => [__($status)]]], Response::HTTP_BAD_REQUEST);
+            : response()->json([
+                'errors' => ['email' => [__($status)]],
+                'message' => __($status),
+            ], Response::HTTP_BAD_REQUEST);
     }
 
     public function logout(): JsonResponse

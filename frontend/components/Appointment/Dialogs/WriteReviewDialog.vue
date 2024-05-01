@@ -36,32 +36,29 @@ async function confirmReview() {
     rating: form.value.rating*2,
     comment: form.value.comment,
   }
-  const { error } = await backFetch('/appointments/'+props.appointmentId+'/write-review', {
+  backFetch('/appointments/'+props.appointmentId+'/write-review', {
     method: 'post',
     body,
-    headers: {'Accept': 'application/json'},
+  }).then(() => {
+    emit('confirm')
+  }).catch((error) => {
+    if (error) {
+      console.error(error)
+
+      return
+    }
   })
-
-  if (error.value) {
-    console.error(error.value)
-
-    return
-  }
-
-  emit('confirm')
 }
 
 async function fetchReview() {
-  const { data } = await backFetch<ServiceReview>('/appointments/' + props.appointmentId + '/review', {
+  await backFetch<ServiceReview>('/appointments/' + props.appointmentId + '/review', {
     method: 'get',
-    headers: {'Accept': 'application/json'},
-  })
+  }).then((response) => {
+    form.value = response
 
-  if (data.value) {
-    form.value = data.value
-  } else {
+  }).catch((error) => {
     form.value = {...emptyForm}
-  }
+  })
 }
 </script>
 

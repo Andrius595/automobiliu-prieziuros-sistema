@@ -79,6 +79,8 @@ const valid = ref(false)
 const email = ref('')
 const password = ref('')
 
+const {errorToast} = useToast()
+
 const form = ref({
   first_name: '',
   last_name: '',
@@ -95,14 +97,20 @@ definePageMeta({
 
 async function register() {
   if (valid.value) {
-    const response = await useFetch('/api/auth/register', {
+    const {data, error} = await useFetch('/api/auth/register', {
       method: 'POST',
       body: form.value,
+      watch: false,
     })
 
-    if (response.id) {
-      await navigateTo('/login')
+    if (error.value) {
+      const errorMessage = error.value.data?.data?.message ?? 'Įvyko klaida'
+      errorToast(errorMessage)
+
+      return
     }
+
+    await navigateTo('/cars')
   }
 }
 </script>

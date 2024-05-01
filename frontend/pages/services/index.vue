@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <template v-if="isSystemAdmin">
+    <template v-if="isSystemAdminComputed">
       <ServicesTable />
     </template>
-    <template v-else-if="isClient">
+    <template v-else-if="isClientComputed">
       <ServicesCardsList />
     </template>
   </v-container>
@@ -14,7 +14,7 @@ import {definePageMeta} from "#imports";
 import ServicesTable from "~/components/Service/Tables/ServicesTable.vue";
 import ServicesCardsList from "~/components/Service/ServicesCardsList.vue";
 
-const { isSystemAdmin, isClient } = useRoles();
+const { isSystemAdminComputed, isClientComputed } = useRoles();
 
 
 definePageMeta({

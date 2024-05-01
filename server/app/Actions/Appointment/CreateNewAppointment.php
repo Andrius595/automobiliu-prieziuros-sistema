@@ -14,7 +14,6 @@ class CreateNewAppointment extends CreatesNewRecord
     public function rules($input): array
     {
         $car = Car::findOrFail($input['car_id']);
-        // TODO what if mileage type changes?
         $latestMileage = $car->appointments()->whereNotNull('completed_at')->orderBy('completed_at', 'desc')->first()->current_mileage ?? 1;
 
         return [

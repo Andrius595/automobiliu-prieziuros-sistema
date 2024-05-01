@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import backFetch from "~/utils/backFetch";
-import { useSnackbar } from "~/composables/useSnackbar";
+import backAction from "~/utils/backAction";
 import { type Car } from '~/types/Car'
+
+const { successToast, errorToast } = useToast()
+const { t } = useI18n()
 
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
@@ -11,7 +13,7 @@ const props = defineProps({
   },
 })
 
-const errors = ref([])
+const errors = ref<Record<string, string[]>>({})
 
 const emptyCar = {
   make: '',
@@ -20,37 +22,45 @@ const emptyCar = {
   plate_no: '',
   year_of_manufacture: null,
   mileage_type: 0,
+  registration_document: null,
 }
-const car = ref<Partial<Car>>({...emptyCar})
+const car = ref<Partial<Car> & {registration_document: null|string}>({...emptyCar})
+
 
 const menu = ref(false)
+
+const mileageTypes = [
+  { title: t('car.kilometers'), value: 0 },
+  { title: t('car.miles'), value: 1 },
+]
 
 function closeDialog() {
   emit('close')
 }
 
-async function confirmCreate() {
-  const { data, error } = await backFetch<Car>('/user/register-new-car', {
+function confirmCreate() {
+  errors.value = {}
+  console.log(111)
+  const body = {...car.value}
+  backAction<Car>('/user/register-new-car', {
     method: 'post',
-    body: car.value,
-    headers: {'Accept': 'application/json'},
+    body,
+  }).then(() => {
+    successToast('Car created successfully!')
+    emit('confirm')
+  }).catch((error) => {
+    errors.value = error.data.errors
+    errorToast(error.data.message)
   })
 
-  if (error.value) {
-    errors.value = error.value.data.errors
-    useSnackbar().show(error.value.data.message)
-    return
-  }
-
-  successToast('Car created successfully!')
-  emit('confirm')
+  return
 }
 </script>
 
 <template>
   <v-dialog :model-value="visible" max-width="700px" @update:model-value="(value) => emit('update:visible', value)">
     <v-card>
-      <v-card-title class="headline">Edit car</v-card-title>
+      <v-card-title class="headline">Registruoti automobilį</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
@@ -73,7 +83,7 @@ async function confirmCreate() {
                   location="end"
               >
                 <template v-slot:activator="{ props }">
-                  <v-text-field v-bind="props" label="Year" v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />
+                  <v-text-field v-bind="props" :label="$t('car.year_of_manufacture')" v-model="car.year_of_manufacture" :error-messages="errors.year_of_manufacture" />
                 </template>
 
                 <v-card min-width="300">
@@ -87,36 +97,36 @@ async function confirmCreate() {
                         variant="text"
                         @click="menu = false"
                     >
-                      Save
+                      {{ $t('common.save') }}
                     </v-btn>
                   </v-card-actions>
                 </v-card>
               </v-menu>
             </v-col>
             <v-col
-                class="py-2"
                 cols="12"
                 md="6"
             >
-              <p>{{ $t('car.mileage_type')}}</p>
-
-              <v-btn-toggle
+              <v-select
                   v-model="car.mileage_type"
-                  mandatory
-                  shaped
-              >
-                <v-btn>KM</v-btn>
-
-                <v-btn>M</v-btn>
-              </v-btn-toggle>
+                  :items="mileageTypes"
+                  :label="$t('car.mileage_type')"
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-text-field
+                  v-model="car.registration_document"
+                  :label="$t('car.registration_document_number')"
+                  :error-messages="errors.registration_document"
+              ></v-text-field>
             </v-col>
           </v-row>
         </v-container>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="blue darken-1" text @click.prevent="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click.once="confirmCreate">Create</v-btn>
+        <v-btn color="grey" variant="text" @click.prevent="closeDialog">{{ $t('common.cancel') }}</v-btn>
+        <v-btn color="success" variant="tonal" @click.prevent="confirmCreate">{{ $t('common.create') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

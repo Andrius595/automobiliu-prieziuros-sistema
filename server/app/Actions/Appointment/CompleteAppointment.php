@@ -8,13 +8,13 @@ use App\Models\Appointment;
 class CompleteAppointment
 {
 
-    public function __construct()
+    public function __construct(private readonly UpdateAppointment $updateAppointment)
     {
     }
 
     public function complete(Appointment $appointment): void
     {
-        $appointment->update(['completed_at' => now()]);
+        $this->updateAppointment->update($appointment, ['completed_at' => now()]);
 
         WriteAppointmentDataToBlockchainJob::dispatch($appointment);
     }

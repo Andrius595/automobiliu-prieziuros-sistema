@@ -50,23 +50,17 @@ async function loadCar(carId: number) {
 }
 
 async function confirmEdit() {
-  const { data, error } = await backFetch('/cars/' + props.carId, {
+  backAction<Car>('/cars/' + props.carId, {
     method: 'put',
     body: car.value,
-  })
-
-  if (error.value) {
-    errors.value = error.value.data.errors
-    errorToast(error.value.data.message)
-
-    return
-  }
-
-  if (data.value) {
-    car.value = data.value
+  }).then((response) => {
+    car.value = response
     successToast(t('car.updated_successfully'))
     emit('confirm')
-  }
+  }).catch((error) => {
+    errors.value = error.data.errors
+    errorToast(error.data.message)
+  })
 }
 </script>
 

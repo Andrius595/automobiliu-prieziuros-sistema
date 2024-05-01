@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Actions\Appointment\UpdateAppointment;
 use App\Models\Appointment;
 use Aws\Lambda\LambdaClient;
 use Illuminate\Bus\Queueable;
@@ -52,6 +53,7 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 
         $results = json_decode($awsResults->get('Payload')?->getContents() ?? '{}', true, 512, JSON_THROW_ON_ERROR);
 
-        $appointment->update(['transaction_hash' => $results['body']['txHash'] ?? null]);
+        $updateAppointment = new UpdateAppointment();
+        $updateAppointment->update($appointment, ['transaction_hash' => $results['body']['txHash'] ?? null]);
     }
 }

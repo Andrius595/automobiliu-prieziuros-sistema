@@ -50,19 +50,19 @@ async function confirmShare() {
 }
 
 async function confirmDelete() {
-  const { error } = await backFetch('/cars/' + props.carId + '/delete-public-history', {
+  backAction('/cars/' + props.carId + '/delete-public-history', {
     method: 'delete',
+  }).then(() => {
+    existingUrls.value = []
+    url.value = ''
+    successToast(t('car.public_history_url_deleted'))
+  }).catch((error) => {
+      console.error(error)
   })
 
-  if (error.value) {
-    console.error(error.value)
 
-    return
-  }
 
-  existingUrls.value = []
-  url.value = ''
-  successToast(t('car.public_history_url_deleted'))
+
 }
 
 async function getExistingUrls() {

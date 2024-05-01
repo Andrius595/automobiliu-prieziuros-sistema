@@ -1,9 +1,9 @@
 <template>
   <v-container>
-    <template v-if="isClient">
+    <template v-if="isClientComputed">
       <UserCarsTable :user-id="user.id" />
     </template>
-    <template v-else-if="isSystemAdmin">
+    <template v-else-if="isSystemAdminComputed">
       <CarsTable />
     </template>
   </v-container>
@@ -15,7 +15,7 @@ import ServiceCarsTable from "~/components/Car/Tables/ServiceCarsTable.vue";
 import CarsTable from "~/components/Car/Tables/CarsTable.vue";
 import type {UserSession} from "~/types/userSession";
 
-const { isClient, isServiceEmployee, isSystemAdmin } = useRoles()
+const { isClientComputed, isServiceEmployeeComputed, isSystemAdminComputed } = useRoles()
 const auth = useAuth()
 
 const user = await auth.getUser() as UserSession

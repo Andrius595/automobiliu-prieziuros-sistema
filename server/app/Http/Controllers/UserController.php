@@ -3,18 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Car\CreateNewCar;
-use App\Actions\Car\DeletePublicCarHistory;
 use App\Actions\Car\ListCars;
 use App\Actions\Car\RemoveCarFromUser;
 use App\Actions\Car\ShareCar;
-use App\Actions\Car\ShareCarHistory;
 use App\Actions\Car\TransferCar;
-use App\Actions\Car\UpdateCar;
-use App\Actions\Fortify\CreateNewUser;
+use App\Actions\User\CreateNewUser;
 use App\Actions\User\ListUsers;
 use App\Config\PermissionsConfig;
+use App\Http\Requests\RegisterNewCarRequest;
 use App\Http\Requests\RemoveCarFromUserRequest;
-use App\Http\Requests\ShareCarHistoryRequest;
 use App\Http\Requests\ShareCarRequest;
 use App\Http\Requests\StoreUserRequest;
 use App\Models\Car;
@@ -88,7 +85,7 @@ class UserController extends Controller
 
         return response()->json($users);
     }
-    public function registerNewCar(Request $request, CreateNewCar $createNewCar): JsonResponse
+    public function registerNewCar(RegisterNewCarRequest $request, CreateNewCar $createNewCar): JsonResponse
     {
         $data = $request->all();
         $data['owner_id'] = Auth::id();

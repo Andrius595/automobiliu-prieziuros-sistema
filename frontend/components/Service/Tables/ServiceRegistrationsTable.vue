@@ -10,17 +10,11 @@
         item-value="id"
         @update:options="loadItems"
     >
-      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-        <tr>
-          <template v-for="column in columns" :key="column.key">
-            <th :class="{'text-end': column.align === 'end'}">
-              <span class="mr-2" :class="{'cursor-pointer': column.sortable}" @click="() => column.sortable ? toggleSort(column) : false">{{ $t(column.title) }}</span>
-              <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)"></v-icon>
-              </template>
-            </th>
-          </template>
-        </tr>
+      <template #top>
+        <div class="pa-2 d-flex justify-space-between align-center bg-secondary">
+          <h2>{{ $t('navigation.services.registrations_list') }}</h2>
+        </div>
+        <v-divider />
       </template>
       <template #item.actions="{ item }">
         <div class="d-flex justify-end gap-x-2">
@@ -41,12 +35,13 @@ import backFetch from "~/utils/backFetch";
 import type {Appointment} from "~/types/Appointment";
 import ConfirmRegistrationDialog from "~/components/Service/Dialogs/ConfirmRegistrationDialog.vue";
 
+const { t } = useI18n()
 const itemsPerPage = ref(5)
 const headers = ref([
-  {title: 'car.make', key: 'car.make', width: '32%'},
-  {title: 'car.model', key: 'car.model', width: '32%'},
-  {title: 'car.vin', key: 'car.vin', width: '30%'},
-  {title: 'Actions', key: 'actions', sortable: false, align: 'end', width: '6%'},
+  {title: t('car.make'), key: 'car.make', width: '32%'},
+  {title: t('car.model'), key: 'car.model', width: '32%'},
+  {title: t('car.vin'), key: 'car.vin', width: '30%'},
+  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end', width: '6%'},
 ])
 const totalItems = ref(0)
 const serverItems = ref<Appointment[]>([])

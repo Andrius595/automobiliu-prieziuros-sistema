@@ -24,7 +24,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    $user = $request->user();
+    $roles = $user->roles;
+    $response = [
+        ...$user->toArray(),
+        'roles' => $roles->pluck('name')->toArray(),
+    ];
+
+    return $response;
 });
 
 Route::group(['prefix' => '/auth', 'middleware' => 'api'], static function() {
@@ -38,7 +45,19 @@ Route::group(['prefix' => '/auth', 'middleware' => 'api'], static function() {
 
 Route::group(['prefix' => '/auth', 'middleware' => ['api']], static function() {
     Route::get('/user', function(Request $request) {
-        return $request->user();
+        $user = $request->user();
+
+        if ($user) {
+            $roles = $user->roles;
+            $response = [
+                ...$user->toArray(),
+                'roles' => $roles->pluck('name')->toArray(),
+            ];
+
+            return $response;
+        }
+
+        return response()->json(null);
     });
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });

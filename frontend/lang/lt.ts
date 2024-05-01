@@ -34,6 +34,10 @@ const lt = {
         transfer_car: 'Perleisti automobilį',
         share_history: 'Dalintis istorija',
         control_public_urls: 'Valdyti viešas nuorodas',
+        registration_document: "Automobilio registracijos liudijimas",
+        registration_document_hint: 'Priimami failai: nuotrauka, pdf',
+        kilometers: 'Kilometrai',
+        miles: 'Mylios',
     },
     service: {
         registrations: {

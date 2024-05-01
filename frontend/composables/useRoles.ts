@@ -1,66 +1,79 @@
 import {Roles} from "~/enums/roles";
-import {useJWT} from "~/composables/useJWT";
-import type {JwtData} from "~/types/JWT";
 import {asyncComputed} from "@vueuse/core/index";
+import type {UserSession} from "~/types/userSession";
 
 export const useRoles = () => {
-    const jwt = useJWT()
+    const auth = useAuth()
+    const evaluating = ref(true);
 
     const hasClientRole = async (): Promise<boolean> => {
-        const data: JwtData|null = await jwt.getTokenData()
+        const user: UserSession|null = await auth.getUser()
 
-        if (!data) {
+        if (!user) {
             return false
         }
 
-        return data.roles.includes(Roles.CLIENT)
+        return user.roles.includes(Roles.CLIENT)
     }
 
     const hasServiceEmployeeRole = async (): Promise<boolean> => {
-        const data: JwtData|null = await jwt.getTokenData()
+        const user: UserSession|null = await auth.getUser()
 
-        if (!data) {
+        if (!user) {
             return false
         }
 
-        return data.roles.includes(Roles.SERVICE_EMPLOYEE)
+        return user.roles.includes(Roles.SERVICE_EMPLOYEE)
     }
 
     const hasServiceAdminRole = async (): Promise<boolean> => {
-        const data: JwtData|null = await jwt.getTokenData()
+        const user: UserSession|null = await auth.getUser()
 
-        if (!data) {
+        if (!user) {
             return false
         }
 
-        return data.roles.includes(Roles.SERVICE_ADMIN)
+        return user.roles.includes(Roles.SERVICE_ADMIN)
     }
 
     const hasSystemAdminRole = async (): Promise<boolean> => {
-        const data: JwtData|null = await jwt.getTokenData()
+        const user: UserSession|null = await auth.getUser()
 
-        if (!data) {
+        if (!user) {
             return false
         }
 
-        return data.roles.includes(Roles.SYSTEM_ADMIN)
+        return user.roles.includes(Roles.SYSTEM_ADMIN)
     }
 
-    const isClient = asyncComputed(async () => {
-        return await hasClientRole()
-    })
+    const isClientComputed = asyncComputed(async () => {
+        let hasRole = await hasClientRole();
+        evaluating.value = false;
+        return hasRole
+    }, false, evaluating)
 
-    const isServiceEmployee = asyncComputed(async () => {
-        return await hasServiceEmployeeRole()
-    })
+    const isServiceEmployeeComputed = asyncComputed(async () => {
+        let hasRole = await hasServiceEmployeeRole();
+        evaluating.value = false;
+        return hasRole
+    }, false, evaluating)
 
-    const isServiceAdmin = asyncComputed(async () => {
-        return await hasServiceAdminRole()
-    })
+    const isServiceAdminComputed = asyncComputed(async () => {
+        let hasRole = await hasServiceAdminRole();
+        evaluating.value = false;
+        return hasRole
+    }, false, evaluating)
 
-    const isSystemAdmin = asyncComputed(async () => {
-        return await hasSystemAdminRole()
-    })
+    const isSystemAdminComputed = asyncComputed(async () => {
+        let hasRole = await hasSystemAdminRole();
+        evaluating.value = false;
+        return hasRole
+    }, false, evaluating)
 
-    return { isClient, isServiceEmployee, isServiceAdmin, isSystemAdmin }
+    return {
+        hasClientRole, isClientComputed,
+        hasServiceEmployeeRole, isServiceEmployeeComputed,
+        hasServiceAdminRole, isServiceAdminComputed,
+        hasSystemAdminRole, isSystemAdminComputed
+    }
 }
