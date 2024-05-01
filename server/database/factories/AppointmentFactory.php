@@ -28,13 +28,22 @@ class AppointmentFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'confirmed_at' => now(),
+            'completed_at' => null,
         ]);
     }
 
     public function completed(): static
     {
         return $this->state(fn (array $attributes) => [
+            'confirmed_at' => now(),
             'completed_at' => now(),
+        ]);
+    }
+    public function registration(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'confirmed_at' => null,
+            'completed_at' => null,
         ]);
     }
 }

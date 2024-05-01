@@ -20,7 +20,6 @@ class RecordTest extends TestCase
 {
     use TestsHelper;
 
-    //CreateNewRecord
     public function test_if_record_is_created(): void
     {
         $car = Car::factory()->create();

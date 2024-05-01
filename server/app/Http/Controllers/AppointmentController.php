@@ -30,5 +30,4 @@ class AppointmentController extends Controller
     {
         return response()->json($appointment->review);
     }
-
 }

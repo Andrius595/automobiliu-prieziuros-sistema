@@ -62,11 +62,6 @@ class CarController extends Controller
         return response()->json($car);
     }
 
-    public function destroy(Car $car)
-    {
-        throw new NotImplementedException();
-    }
-
     public function getCarHistory(Car $car): JsonResponse
     {
         $car->load(['completedAppointments.records', 'completedAppointments.service', 'completedAppointments.car']);

@@ -14,6 +14,8 @@ use App\Actions\Service\UpdateEmployee;
 use App\Actions\Service\UpdateService;
 use App\Actions\User\ListUsers;
 use App\Config\PermissionsConfig;
+use App\Http\Requests\StoreAppointmentRequest;
+use App\Http\Requests\StoreRecordRequest;
 use App\Http\Requests\StoreServiceRequest;
 use App\Http\Requests\UpdateServiceRequest;
 use App\Models\Appointment;
@@ -51,6 +53,8 @@ class ServiceController extends Controller
 
         $serviceData = [
             'title' => $data['title'],
+            'city_id' => $data['city_id'],
+            'address' => $data['address'],
         ];
         $service = Service::create($serviceData);
 
@@ -82,13 +86,6 @@ class ServiceController extends Controller
 
         return response()->json($service);
     }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Service $service)
-    {
-        //
-    }
 
     public function getRegistrations(Request $request, ListAppointments $listAppointments): JsonResponse
     {
@@ -114,7 +111,7 @@ class ServiceController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->service_id !== $appointment->service_id) {
+        if ($user?->service_id !== $appointment->service_id) {
             return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -224,7 +221,7 @@ class ServiceController extends Controller
         return response()->json($car);
     }
 
-    public function createAppointment(Request $request, CreateNewAppointment $newAppointment, CreateNewCar $newCar): JsonResponse
+    public function createAppointment(StoreAppointmentRequest $request, CreateNewAppointment $newAppointment, CreateNewCar $newCar): JsonResponse
     {
         $data = $request->all();
         $data['service_id'] = Auth::user()->service_id;
@@ -233,19 +230,12 @@ class ServiceController extends Controller
 
         $appointment = $newAppointment->create($data);
 
-
         return response()->json($appointment, Response::HTTP_CREATED);
     }
 
-    public function createRecord(Request $request, Appointment $appointment, CreateNewRecord $newRecord): JsonResponse
+    public function createRecord(StoreRecordRequest $request, Appointment $appointment, CreateNewRecord $newRecord): JsonResponse
     {
-        $user = Auth::user();
-
-        if ($appointment->can_be_modified && $user->service_id !== $appointment->service_id) {
-            return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
-        }
-
-        $data = $request->all();
+        $data = $request->validated();
         $data['appointment_id'] = $appointment->id;
 
         $record = $newRecord->create($data);

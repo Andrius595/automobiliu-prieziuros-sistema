@@ -10,7 +10,7 @@ class UpdateCar extends UpdatesRecord
 {
     public function update(Model $record, array $data): bool
     {
-        if ($record->owner_id !== $data['owner_id']) {
+        if (isset($data['owner_id']) && $record->owner_id !== $data['owner_id']) {
             $data['owner_confirmed_at'] = null;
         }
 

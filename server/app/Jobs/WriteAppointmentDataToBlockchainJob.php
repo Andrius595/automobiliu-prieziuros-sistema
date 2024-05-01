@@ -15,13 +15,16 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    private LambdaClient $client;
-
     public function __construct(
         private readonly Appointment   $appointment,
     )
     {
-        $this->client = new LambdaClient([
+    }
+
+    public function handle(): void
+    {
+        $appointment = $this->appointment;
+        $client = new LambdaClient([
             'region' => env('AWS_DEFAULT_REGION'),
             'version' => 'latest',
             'credentials' => [
@@ -29,11 +32,6 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
                 'secret' => env('AWS_SECRET_ACCESS_KEY'),
             ],
         ]);
-    }
-
-    public function handle(): void
-    {
-        $appointment = $this->appointment;
 
         $car = $appointment->car;
         $records = $appointment->records;
@@ -46,7 +44,7 @@ class WriteAppointmentDataToBlockchainJob implements ShouldQueue
 
         $hashed = hash('sha256', $hash_string);
 
-        $awsResults = $this->client->invoke([
+        $awsResults = $client->invoke([
             'FunctionName' => 'sendTransactionTest',
             'Payload' => json_encode(['hash' => $hashed]),
         ]);

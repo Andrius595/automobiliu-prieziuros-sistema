@@ -26,12 +26,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     $user = $request->user();
     $roles = $user->roles;
-    $response = [
+
+    return [
         ...$user->toArray(),
         'roles' => $roles->pluck('name')->toArray(),
     ];
-
-    return $response;
 });
 
 Route::group(['prefix' => '/auth', 'middleware' => 'api'], static function() {
@@ -44,17 +43,15 @@ Route::group(['prefix' => '/auth', 'middleware' => 'api'], static function() {
 });
 
 Route::group(['prefix' => '/auth', 'middleware' => ['api']], static function() {
-    Route::get('/user', function(Request $request) {
+    Route::get('/user', static function(Request $request) {
         $user = $request->user();
 
         if ($user) {
             $roles = $user->roles;
-            $response = [
+            return [
                 ...$user->toArray(),
                 'roles' => $roles->pluck('name')->toArray(),
             ];
-
-            return $response;
         }
 
         return response()->json(null);
@@ -62,9 +59,9 @@ Route::group(['prefix' => '/auth', 'middleware' => ['api']], static function() {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::group(['middleware' => 'auth:api'], static function () {
     Route::apiResource('/cars', CarController::class);
-    Route::group(['prefix' => '/cars'], function() {
+    Route::group(['prefix' => '/cars'], static function() {
         Route::get('/vin/{vin}', [ServiceController::class, 'getCarByVin']);
         Route::get('/reminders/{reminder}', [ReminderController::class, 'show']);
         Route::put('/reminders/{reminder}', [ReminderController::class, 'update']);
@@ -78,9 +75,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     });
 
     Route::apiResource('services', ServiceController::class);
-    Route::group(['prefix' => 'services/{service}'], function() {
+    Route::group(['prefix' => 'services/{service}'], static function() {
         Route::post('/register', [ServiceController::class, 'registerForAppointment']);
-        Route::group(['prefix' => '/employees'], function() {
+        Route::group(['prefix' => '/employees'], static function() {
             Route::get('/', [ServiceController::class, 'getEmployees']);
             Route::post('/', [ServiceController::class, 'createEmployee']);
             Route::get('/{user}', [ServiceController::class, 'getEmployee']);
@@ -91,15 +88,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::apiResource('appointments', AppointmentController::class);
     Route::post('appointments/{appointment}/write-review', [AppointmentController::class, 'writeReview']);
     Route::post('appointments/{appointment}/review', [AppointmentController::class, 'getReview']);
-    Route::group(['prefix' => 'users'], function() {
+    Route::group(['prefix' => 'users'], static function() {
         Route::get('list-for-select', [UserController::class, 'indexForSelect']);
     });
     Route::apiResource('users', UserController::class);
 
 
-    Route::group(['prefix' => '/user'], function() {
+    Route::group(['prefix' => '/user'], static function() {
         Route::post('/register-new-car', [UserController::class, 'registerNewCar']);
-        Route::group(['prefix' => '/my-cars'], function() {
+        Route::group(['prefix' => '/my-cars'], static function() {
             Route::get('/', [UserController::class, 'getMyCars']);
             Route::delete('/{car}/remove', [UserController::class, 'removeCar']);
             Route::post('/{car}/share', [UserController::class, 'shareCar']);
@@ -107,11 +104,10 @@ Route::group(['middleware' => 'auth:api'], function () {
         });
     });
 
-    Route::group(['prefix' => '/service'], function() {
+    Route::group(['prefix' => '/service'], static function() {
         Route::get('registrations', [ServiceController::class, 'getRegistrations']);
         Route::post('registrations/{appointment}/confirm', [ServiceController::class, 'confirmRegistration']);
-        Route::put('update-service', [ServiceController::class, 'updateService']);
-        Route::group(['prefix' => 'appointments'], function() {
+        Route::group(['prefix' => 'appointments'], static function() {
             Route::post('create-appointment', [ServiceController::class, 'createAppointment']);
             Route::get('active', [ServiceController::class, 'getActiveAppointments']);
             Route::get('completed', [ServiceController::class, 'getCompletedAppointments']);
@@ -120,7 +116,7 @@ Route::group(['middleware' => 'auth:api'], function () {
             Route::get('/records/{record}', [ServiceController::class, 'getRecord']);
             Route::put('/records/{record}', [ServiceController::class, 'updateRecord']);
             Route::delete('/records/{record}', [ServiceController::class, 'deleteRecord']);
-            Route::group(['prefix' => '{appointment}/records'], function() {
+            Route::group(['prefix' => '{appointment}/records'], static function() {
                 Route::get('/', [ServiceController::class, 'getAppointmentRecords']);
                 Route::post('/', [ServiceController::class, 'createRecord']);
             });

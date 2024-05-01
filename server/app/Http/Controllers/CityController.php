@@ -36,7 +36,7 @@ class CityController extends Controller
     {
         $city = $newCity->create($request->validated());
 
-        return response()->json($city);
+        return response()->json($city, 201);
     }
 
 

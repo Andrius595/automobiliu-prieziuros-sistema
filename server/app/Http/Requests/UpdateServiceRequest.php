@@ -31,6 +31,7 @@ class UpdateServiceRequest extends FormRequest
             'service_categories_ids' => ['nullable', 'array'],
             'service_categories_ids.*' => ['integer', 'exists:service_categories,id'],
             'city_id' => ['required', 'integer', 'exists:cities,id'],
+            'address' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

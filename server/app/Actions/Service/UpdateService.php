@@ -35,8 +35,9 @@ class UpdateService extends UpdatesRecord
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'description' => ['required', 'string'],
+            'description' => ['nullable', 'string'],
             'image.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'],
+            'address' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

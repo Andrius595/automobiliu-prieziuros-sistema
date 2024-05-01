@@ -26,7 +26,7 @@ class ServiceCategoryController extends Controller
     {
         $serviceCategory = $newServiceCategory->create($request->validated());
 
-        return response()->json($serviceCategory);
+        return response()->json($serviceCategory, 201);
     }
 
     public function show(ServiceCategory $serviceCategory): JsonResponse

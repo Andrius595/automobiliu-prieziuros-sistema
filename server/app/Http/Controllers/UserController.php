@@ -49,7 +49,7 @@ class UserController extends Controller
         return response()->json($user);
     }
 
-    public function destroy(User $user): JsonResponse
+    public function destroy(User $user, RemoveCarFromUser $removeCarFromUser): JsonResponse
     {
         if ($user->id === Auth::id()) {
             return response()->json([
@@ -59,10 +59,7 @@ class UserController extends Controller
         $cars = $user->cars;
 
         foreach ($cars as $car) {
-            $car->update([
-                'owner_id' => null,
-                'owner_confirmed_at' => null,
-            ]);
+            $removeCarFromUser->remove($car, $user->id);
         }
         $user->delete();
 

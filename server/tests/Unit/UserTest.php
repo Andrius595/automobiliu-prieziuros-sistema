@@ -2,8 +2,7 @@
 
 namespace Tests\Unit;
 
-use App\Actions\Fortify\CreateNewUser;
-use App\Actions\User\CreateUser;
+use App\Actions\User\CreateNewUser;
 use App\Actions\User\ListUsers;
 use App\Config\PermissionsConfig;
 use App\Models\User;

@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use App\Actions\Service\CreateEmployee;
+use App\Actions\Service\ListServices;
 use App\Actions\Service\UpdateEmployee;
 use App\Actions\Service\UpdateService;
 use App\Config\PermissionsConfig;
@@ -34,7 +35,6 @@ class ServiceTest extends TestCase
         Notification::assertSentTo($employee, ResetPassword::class);
     }
 
-    //update employee
     public function test_if_employee_is_updated(): void
     {
         $service = Service::factory()->create();
@@ -63,7 +63,6 @@ class ServiceTest extends TestCase
         $this->assertFalse($employee->hasRole(PermissionsConfig::SERVICE_EMPLOYEE_ROLE));
     }
 
-    //update service
     public function test_if_service_is_updated(): void
     {
         $service = Service::factory()->create();
@@ -81,5 +80,16 @@ class ServiceTest extends TestCase
         $this->assertEquals('Service1', $service->title);
         $this->assertEquals('Description', $service->description);
         $this->assertNotNull($service->logo_path);
+    }
+
+    public function test_if_services_are_listed(): void
+    {
+        $services = Service::factory()->count(3)->create();
+
+        $listServices = new ListServices();
+
+        $services = $listServices->list();
+
+        $this->assertEquals(3, $services->total());
     }
 }

@@ -17,9 +17,15 @@ class ListAppointments extends ListsRecords
                 'owner_first_name' => $this->query->whereHas('car.owner', function ($q) use ($searchParam) {
                     $q->where('first_name', 'like', "%$searchParam%");
                 }),
-                'registrations' => (bool)$searchParams['registrations'] === true ? $this->query->whereNull('confirmed_at') : $this->query,
-                'active' => (bool)$searchParams['active'] === true ? $this->query->whereNull('completed_at') : $this->query,
-                'completed' => (bool)$searchParams['completed'] === true ? $this->query->whereNotNull('completed_at') : $this->query,
+                'registrations' => (bool)$searchParams['registrations'] === true
+                    ? $this->query->whereNull('confirmed_at')
+                    : $this->query,
+                'active' => (bool)$searchParams['active'] === true
+                    ? $this->query->whereNull('completed_at')->whereNotNull('confirmed_at')
+                    : $this->query,
+                'completed' => (bool)$searchParams['completed'] === true
+                    ? $this->query->whereNotNull('completed_at')
+                    : $this->query,
                 default => $this->query->where($key, 'like', "%$searchParam%"),
             };
         }

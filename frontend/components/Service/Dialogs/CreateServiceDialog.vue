@@ -5,7 +5,7 @@ import {Roles} from "~/enums/roles";
 
 const { t } = useI18n()
 
-const emit = defineEmits(['close', 'confirm', 'update:visible'])
+const emit = defineEmits(['clo se', 'confirm', 'update:visible'])
 const props = defineProps({
   visible: {
     type: Boolean,
