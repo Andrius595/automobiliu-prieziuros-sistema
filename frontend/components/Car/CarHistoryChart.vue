@@ -22,6 +22,9 @@ const options = {
       enabled: false,
       position: 'nearest',
       external: externalTooltipHandler
+    },
+    legend: {
+      display: false
     }
   }
 }
@@ -31,8 +34,11 @@ const data2 = computed(() => {
     labels: props.appointments.map((appointment) => appointment.completed_at),
     datasets: [
       {
-        label: 'Data One',
+        label: false,
         backgroundColor: '#f87979',
+        borderColor: '#f87979',
+        pointRadius: 5,
+        pointHitRadius: 10,
         data: [...props.appointments]
       }
     ]

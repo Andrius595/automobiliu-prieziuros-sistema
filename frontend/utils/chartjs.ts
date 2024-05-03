@@ -29,8 +29,6 @@ export const externalTooltipHandler = (context) => {
     const {chart, tooltip} = context;
     const tooltipEl = getOrCreateTooltip(chart);
 
-    console.log('context', context)
-
     // Hide if no tooltip
     if (tooltip.opacity === 0) {
         tooltipEl.style.opacity = 0;

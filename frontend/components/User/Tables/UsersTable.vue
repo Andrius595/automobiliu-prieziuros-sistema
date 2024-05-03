@@ -86,7 +86,6 @@ async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerP
   const { data }  = await backFetch<PaginatedResponse<Car>>('/users', {
     method: 'GET',
     query,
-    headers: {'Accept': 'application/json'},
   })
 
   serverItems.value = data.value?.data || []

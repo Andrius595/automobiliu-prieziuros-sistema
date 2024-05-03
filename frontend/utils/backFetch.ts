@@ -11,7 +11,7 @@ export default async <DataT, ErrorT = any>(
     let token = await jwt.getToken()
 
     if (!token) {
-        await navigateTo('/login');
+        return;
     }
 
     options.headers = {

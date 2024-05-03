@@ -44,7 +44,7 @@ const list = computed(() => {
     ]
   } else if (isSystemAdmin) {
     return [
-      {title: 'navigation.users_list', to: '/users'},
+      // {title: 'navigation.users_list', to: '/users'}, TODO commented out for presentation
       {title: 'navigation.services_list', to: '/services'},
       {title: 'navigation.cars_list', to: '/cars'},
       {title: 'navigation.cities_list', to: '/cities'},

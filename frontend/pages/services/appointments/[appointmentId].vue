@@ -60,7 +60,9 @@ async function appointmentCompleted() {
             <v-col>
               <p>{{ $t('car.car') }}: {{ appointment.car.make }} {{ appointment.car.model }} ({{ appointment.car.year_of_manufacture}})</p>
               <p>{{ $t('car.vin') }}: {{ appointment.car.vin }}</p>
-
+              <template v-if="appointment.completed_at !== null">
+                <p>Rida aptarnavimo metu: {{ appointment.current_mileage }}{{ appointment.mileage_type === 0 ? 'km' : 'm'}}</p>
+              </template>
             </v-col>
           </v-row>
           <v-row>
@@ -72,7 +74,7 @@ async function appointmentCompleted() {
       </v-card>
     </v-col>
   </v-row>
-  <CompleteAppointmentDialog :visible="showCompleteAppointmentDialog" :appointment-id="appointmentId" @confirm="appointmentCompleted" @close="closeCompleteAppointmentDialog" />
+  <CompleteAppointmentDialog :visible="showCompleteAppointmentDialog" :mileage="appointment.current_mileage" :appointment-id="appointmentId" @confirm="appointmentCompleted" @close="closeCompleteAppointmentDialog" />
 </v-container>
 </template>
 

@@ -96,7 +96,7 @@ function confirmCreate() {
         <template v-if="form.type === 4">
           <v-col cols="12">
             <v-alert type="warning">
-              Priminimas gali buti netikslus (translate)
+              Priminimas gali būti netikslus, jei automobilis turi mažai aptarnavimų.
             </v-alert>
           </v-col>
         </template>
@@ -107,7 +107,7 @@ function confirmCreate() {
               location="end"
           >
             <template v-slot:activator="{ props }">
-              <v-text-field v-bind="props" label="Year" readonly :model-value="formattedDate" />
+              <v-text-field v-bind="props" label="Data, nuo kurios skaičiuojamas intervalas" readonly :model-value="formattedDate" />
             </template>
 
             <v-card min-width="300">

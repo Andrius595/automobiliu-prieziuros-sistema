@@ -33,7 +33,7 @@ class CreateNewCar extends CreatesNewRecord
             'color' => ['sometimes', 'string'],
             'mileage_type' => ['required', 'boolean'],
             'owner_id' => ['sometimes', 'integer', 'exists:users,id'],
-            'registration_document' => 'sometimes|string|regex:/\d/',
+            'registration_document' => ['sometimes', 'string'],
         ];
     }
 }

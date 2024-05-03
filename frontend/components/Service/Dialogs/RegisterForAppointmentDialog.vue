@@ -3,6 +3,7 @@ import backFetch from "~/utils/backFetch";
 import type {Car} from "~/types/Car";
 import type {PaginatedResponse} from "~/types/Responses";
 
+const { successToast } = useToast()
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
   visible: {
@@ -41,16 +42,20 @@ async function loadCars() {
 function closeDialog() {
   emit('close')
 }
-function confirmRegistration() {
-  backFetch('/services/'+props.serviceId+'/register', {
+async function confirmRegistration() {
+  const { data, error } = await backFetch('/services/'+props.serviceId+'/register', {
     method: 'post',
     body: form.value,
     headers: {'Accept': 'application/json'},
-  }).then(() => {
-    emit('confirm')
-  }).catch((e) => {
-    console.error(e)
   })
+
+  if (error.value) {
+    console.error(error.value)
+    return
+  }
+
+  successToast('Vizitui užsiregistravote sėkmingai. Serviso darbuotojas susisieks su jumis artimiausiu metu.')
+  emit('confirm')
 }
 </script>
 

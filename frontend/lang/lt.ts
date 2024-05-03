@@ -38,6 +38,8 @@ const lt = {
         registration_document_hint: 'Priimami failai: nuotrauka, pdf',
         kilometers: 'Kilometrai',
         miles: 'Mylios',
+        history_url: 'Istorijos nuoroda',
+        history_shared_and_copied: 'Istorija sėkmingai pasidalinta ir nukopijuota į iškarpinę',
     },
     service: {
         registrations: {
@@ -78,6 +80,7 @@ const lt = {
         blockchain_transaction: 'Blokų grandinės transakcija',
         completed_at: 'Užbaigta',
         transaction_check_string: 'Transakcijos tikrinimo eilutė',
+        leave_review: 'Palikti atsiliepimą',
     },
     reminder: {
         reminders: 'Priminimai',

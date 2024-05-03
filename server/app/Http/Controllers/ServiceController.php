@@ -207,7 +207,7 @@ class ServiceController extends Controller
             return response()->json(['message' => 'Negalite atlikti šio veiksmo'], Response::HTTP_UNAUTHORIZED);
         }
 
-        $completeAppointment->complete($appointment);
+        $completeAppointment->complete($appointment, (int)$request->input('current_mileage'));
 
         return response()->json($appointment, Response::HTTP_OK);
     }

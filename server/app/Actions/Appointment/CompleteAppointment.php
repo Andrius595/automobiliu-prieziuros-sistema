@@ -12,9 +12,12 @@ class CompleteAppointment
     {
     }
 
-    public function complete(Appointment $appointment): void
+    public function complete(Appointment $appointment, int $mileage): void
     {
-        $this->updateAppointment->update($appointment, ['completed_at' => now()]);
+        $this->updateAppointment->update($appointment, [
+            'current_mileage' => $mileage,
+            'completed_at' => now()
+        ]);
 
         WriteAppointmentDataToBlockchainJob::dispatch($appointment);
     }

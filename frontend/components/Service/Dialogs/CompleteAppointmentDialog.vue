@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import backFetch from "~/utils/backFetch";
 
+const { successToast } = useToast()
+
 const emit = defineEmits(['close', 'confirm', 'update:visible'])
 const props = defineProps({
   visible: {
@@ -11,6 +13,19 @@ const props = defineProps({
     type: Number,
     required: false,
   },
+  mileage: {
+    type: Number,
+    required: false,
+  },
+})
+
+const mileage = ref<number>(0)
+
+
+watch(() => props.visible, (value) => {
+  if (value && props.mileage !== null && props.mileage !== undefined) {
+    mileage.value = props.mileage
+  }
 })
 
 function closeDialog() {
@@ -20,6 +35,9 @@ function closeDialog() {
 async function confirmComplete() {
   const { error } = await backFetch('/service/appointments/'+props.appointmentId+'/complete', {
     method: 'post',
+    body: {
+      current_mileage: mileage,
+    }
   })
 
   if (error.value) {
@@ -28,6 +46,7 @@ async function confirmComplete() {
     return
   }
 
+  successToast('Vizitas užbaigtas sėkmingai')
   emit('confirm')
 }
 </script>
@@ -35,9 +54,14 @@ async function confirmComplete() {
 <template>
 <v-dialog :model-value="visible" max-width="500px" @update:model-value="(value) => emit('update:visible', value)">
   <v-card>
-    <v-card-title class="headline">{{ $t('service.registrations.confirm_registration') }}</v-card-title>
+    <v-card-title class="headline">Užbaigti vizitą</v-card-title>
     <v-card-text>
-      {{ $t('service.registrations.confirm_registration_message') }}
+      Ar tikrai norite užbaigti šį vizitą? Po užbaigimo duomenys tampa nekeičiami.
+      <v-row class="mt-2">
+        <v-col>
+          <v-text-field v-model="mileage" label="Dabartinis kilometražas" type="number" variant="outlined" required />
+        </v-col>
+      </v-row>
     </v-card-text>
     <v-card-actions>
       <v-spacer></v-spacer>

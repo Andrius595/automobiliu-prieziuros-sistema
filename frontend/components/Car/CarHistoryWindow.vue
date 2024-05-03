@@ -36,7 +36,7 @@ async function fetchCarInformation(carId: number) {
   <div>
     <v-container>
       <v-row>
-        <v-col>
+        <v-col class="px-10">
           <CarHistoryChart :appointments="appointments" />
         </v-col>
       </v-row>
