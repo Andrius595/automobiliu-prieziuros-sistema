@@ -137,6 +137,7 @@ class UserController extends Controller
         $email = $request->input('email');
         if (($user->id !== $car->owner_id && !$user->hasRole(PermissionsConfig::SYSTEM_ADMIN_ROLE))
             || $car->owner->email === $request->input('email')
+            || !User::where('email', $email)->exists()
         ) {
             return response()->json([
                 'message' => 'Negalite atlikti šio veiksmo.'

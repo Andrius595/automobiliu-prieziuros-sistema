@@ -126,7 +126,7 @@ function confirmCreate() {
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="grey" variant="text" @click.prevent="closeDialog">{{ $t('common.cancel') }}</v-btn>
-        <v-btn color="success" variant="tonal" @click.prevent="confirmCreate">{{ $t('common.create') }}</v-btn>
+        <v-btn color="success" variant="tonal" @click.prevent="confirmCreate">{{ $t('car.register') }}</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

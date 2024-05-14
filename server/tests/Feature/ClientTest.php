@@ -131,6 +131,7 @@ class ClientTest extends TestCase
             'plate_no' => 'ABC123',
             'year_of_manufacture' => 2011,
             'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
+            'registration_document' => 'T123123',
         ]);
 
         $response->assertStatus(201);

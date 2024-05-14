@@ -49,13 +49,13 @@ function closeShareHistoryDialog() {
     </div>
     <div>
       <v-list>
-        <v-list-item v-if="car.owner"><strong>{{ $t('car.owner') }}: </strong>{{ car.owner.first_name }} {{ car.owner.last_name }}</v-list-item>
+        <v-list-item v-if="false"><strong>{{ $t('car.owner') }}: </strong>{{ car.owner.first_name }} {{ car.owner.last_name }}</v-list-item>
         <v-list-item><strong>{{ $t('car.plate_no') }}: </strong>{{ car.plate_no }}</v-list-item>
         <v-list-item><strong>{{ $t('car.vin') }}: </strong>{{ car.vin }}</v-list-item>
         <v-list-item><strong>{{ $t('car.make') }}: </strong>{{ car.make }}</v-list-item>
         <v-list-item><strong>{{ $t('car.model') }}: </strong>{{ car.model }}</v-list-item>
         <v-list-item><strong>{{ $t('car.year_of_manufacture') }}: </strong>{{ car.year_of_manufacture }}</v-list-item>
-        <v-list-item><strong>{{ $t('car.color') }}: </strong>{{ car.color }}</v-list-item>
+        <v-list-item v-if="false"><strong>{{ $t('car.color') }}: </strong>{{ car.color }}</v-list-item>
 
       </v-list>
       <TransferCarDialog :car-id="car.id" :visible="showTransferDialog" @confirm="carTransferred" @close="closeTransferDialog" />

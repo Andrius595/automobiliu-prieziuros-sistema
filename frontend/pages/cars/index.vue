@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <template v-if="isClientComputed">
-      <UserCarsTable :user-id="user.id" />
+      <CarsCardsList :user-id="user.id" />
     </template>
     <template v-else-if="isSystemAdminComputed">
       <CarsTable />
@@ -10,12 +10,11 @@
 </template>
 
 <script setup lang="ts">
-import UserCarsTable from "~/components/Car/Tables/UserCarsTable.vue";
-import ServiceCarsTable from "~/components/Car/Tables/ServiceCarsTable.vue";
 import CarsTable from "~/components/Car/Tables/CarsTable.vue";
 import type {UserSession} from "~/types/userSession";
+import CarsCardsList from "~/components/Car/CarsCardsList.vue";
 
-const { isClientComputed, isServiceEmployeeComputed, isSystemAdminComputed } = useRoles()
+const { isClientComputed, isSystemAdminComputed } = useRoles()
 const auth = useAuth()
 
 const user = await auth.getUser() as UserSession

@@ -40,6 +40,8 @@ const lt = {
         miles: 'Mylios',
         history_url: 'Istorijos nuoroda',
         history_shared_and_copied: 'Istorija sėkmingai pasidalinta ir nukopijuota į iškarpinę',
+        registration_document_number: 'Registracijos liudijimo numeris',
+        register: 'Registruoti',
     },
     service: {
         registrations: {

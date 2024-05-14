@@ -32,7 +32,7 @@ class AppointmentTest extends TestCase
 
         $this->assertNull($appointment->completed_at);
 
-        $completeAppointment->complete($appointment);
+        $completeAppointment->complete($appointment, 100);
         $appointment->refresh();
 
         $this->assertNotNull($appointment->completed_at);

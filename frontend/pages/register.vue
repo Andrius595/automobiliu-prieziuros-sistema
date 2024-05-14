@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex flex-column justify-center align-center flex-grow-1">
-    <h1 class="mb-4 site-name text-h2 text-primary">CarHorizontal</h1>
+    <h1 class="mb-4 site-name text-h2 text-primary">{{ $t('common.aps_full')}}</h1>
     <v-form v-model="valid" style="width: 50%" @submit.prevent="register">
       <div>
         <v-row>

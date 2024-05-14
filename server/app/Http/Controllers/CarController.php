@@ -64,6 +64,10 @@ class CarController extends Controller
 
     public function getCarHistory(Car $car): JsonResponse
     {
+        if (!$car->users()->where('id', Auth::id())->exists()) {
+            throw new AuthorizationException('Negalite atlikti šio veiksmo');
+        }
+
         $car->load(['completedAppointments.records', 'completedAppointments.service', 'completedAppointments.car']);
 
         return response()->json($car->completedAppointments ?? []);

@@ -4,14 +4,13 @@ import {serialize} from "object-to-formdata";
 export default async <DataT, ErrorT = any>(
     route: string,
     options: UseFetchOptions<DataT> & {sendsFiles?: boolean}
-) =>
-{
+) => {
     const jwt = useJWT()
 
     let token = await jwt.getToken()
 
     if (!token) {
-        return;
+        return {} as ReturnType<(typeof useFetch<DataT, ErrorT>)>;
     }
 
     options.headers = {

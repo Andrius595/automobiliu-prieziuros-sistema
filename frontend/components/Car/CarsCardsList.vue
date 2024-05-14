@@ -1,54 +1,111 @@
 <template>
   <div>
-    <v-data-table-server
-        v-model:items-per-page="itemsPerPage"
-        :headers="headers"
-        :items-length="totalItems"
-        :items="serverItems"
-        :loading="loading"
-        class="elevation-1"
-        item-value="name"
-        @update:options="loadItems"
-    >
-      <template v-slot:top>
-        <div class="pa-2 d-flex justify-space-between align-center bg-secondary">
-          <h2>{{ $t('navigation.cars_list') }}</h2>
-          <v-btn color="primary" @click="createItem">{{ $t('car.register_car') }}</v-btn>
-        </div>
-        <v-divider />
-      </template>
-      <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
-        <tr>
-          <template v-for="column in columns" :key="column.key">
-            <th :class="{'text-end': column.align === 'end'}">
-              <span class="mr-2" :class="{'cursor-pointer': column.sortable}" @click="() => column.sortable ? toggleSort(column) : false">{{ $t(column.title) }}</span>
-              <template v-if="isSorted(column)">
-                <v-icon :icon="getSortIcon(column)"></v-icon>
-              </template>
-            </th>
-          </template>
-        </tr>
-      </template>
-      <template v-slot:item.actions="{ item }">
-        <div class="d-flex flex-nowrap justify-end">
-          <v-icon
-              color="secondary"
-              class="mr-2"
-              small
-              @click="editItem(item.id)"
-          >
-            mdi-eye
-          </v-icon>
-          <v-icon
-              color="red-darken-1"
-              small
-              @click="removeCar(item.id)"
-          >
-            mdi-delete
-          </v-icon>
-        </div>
-      </template>
-    </v-data-table-server>
+    <div class="mb-2 d-flex justify-end align-center">
+      <v-btn color="primary" @click="createItem">{{ $t('car.register_car') }}</v-btn>
+    </div>
+    <v-card>
+      <v-data-iterator
+          :items="serverItems"
+          :items-per-page="itemsPerPage"
+          :search="search"
+          :loading="loading"
+      >
+        <template v-slot:header>
+          <v-toolbar color="secondary" class="px-2">
+            <div class="d-flex justify-space-between w-100 align-center">
+              <h2>{{ $t('navigation.cars_list') }}</h2>
+              <v-text-field
+                  v-model="search"
+                  density="comfortable"
+                  :placeholder="$t('common.search')"
+                  prepend-inner-icon="mdi-magnify"
+                  style="max-width: 300px;"
+                  variant="solo"
+                  clearable
+                  hide-details
+              ></v-text-field>
+            </div>
+
+          </v-toolbar>
+        </template>
+
+        <template v-slot:default="{ items }">
+          <v-container class="pa-2" fluid>
+            <v-row dense>
+              <v-col
+                  v-for="item in items"
+                  :key="item.id"
+                  cols="12"
+                  md="4"
+              >
+                <v-card class="d-flex flex-column pb-3 flex-grow-1 h-100"  border flat>
+                  <v-img style="max-height: 150px" :src="imageUrl('')"></v-img>
+
+                  <v-list-item :subtitle="item.raw.vin" class="mb-2">
+                    <template v-slot:title>
+                      <strong class="text-h6 mb-2">{{ item.raw.make }} {{ item.raw.model}} {{item.raw.year_of_manufacture}} ({{ item.raw.plate_no}})</strong>
+                    </template>
+                  </v-list-item>
+                  <div class="d-flex flex-column align-center">
+
+                  </div>
+
+                  <div class="d-flex px-4 mt-auto align-center align-stretch">
+                    <v-btn color="primary" class="flex-grow-1" :to="'/cars/'+item.raw.id">
+                      Peržiūrėti
+                    </v-btn>
+                    <v-btn color="secondary" size="custom" class="px-3 ml-2">
+                      <v-icon
+                          color="white"
+                          small
+                          @click="editItem(item.id)"
+                      >
+                        mdi-pencil
+                      </v-icon>
+                    </v-btn>
+                    <v-btn color="error" size="custom" class="px-3 ml-2">
+                      <v-icon
+                          color="white"
+                          small
+                          @click="removeCar(item.id)"
+                      >
+                        mdi-delete
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-container>
+        </template>
+
+        <template v-slot:footer="{ page, pageCount, prevPage, nextPage }">
+          <div class="d-flex align-center justify-center pa-4">
+            <v-btn
+                :disabled="page === 1"
+                density="comfortable"
+                icon="mdi-arrow-left"
+                variant="tonal"
+                rounded
+                @click="prevPage"
+            ></v-btn>
+
+            <div class="mx-2 text-caption">
+              Page {{ page }} of {{ pageCount }}
+            </div>
+
+            <v-btn
+                :disabled="page >= pageCount"
+                density="comfortable"
+                icon="mdi-arrow-right"
+                variant="tonal"
+                rounded
+                @click="nextPage"
+            ></v-btn>
+          </div>
+        </template>
+      </v-data-iterator>
+    </v-card>
     <UserRemoveCarDialog :car-id="carId" :visible="deleteDialogVisible" @close="deleteDialogVisible = false" @confirm="carRemoved" />
     <EditCarDialog :car-id="carId" :visible="editDialogVisible" @close="editDialogVisible = false" @confirm="carEdited" />
     <RegisterCarDialog :visible="createDialogVisible" @close="createDialogVisible = false" @confirm="carCreated" />
@@ -58,10 +115,11 @@
 <script setup lang="ts">
 import {type PaginatedResponse} from "~/types/Responses";
 import {type Car} from "~/types/Car";
-import DeleteCarDialog from "~/components/Car/Dialogs/DeleteCarDialog.vue";
 import EditCarDialog from "~/components/Car/Dialogs/EditCarDialog.vue";
 import RegisterCarDialog from "~/components/Car/Dialogs/RegisterCarDialog.vue";
 import UserRemoveCarDialog from "~/components/Car/Dialogs/UserRemoveCarDialog.vue";
+import type {DatatablesOptions} from "~/types/DataTable";
+import backFetch from "~/utils/backFetch";
 
 const props = defineProps({
   userId: {
@@ -70,7 +128,9 @@ const props = defineProps({
   }
 })
 
-const itemsPerPage = ref(5)
+const search = ref('')
+
+const itemsPerPage = ref(3)
 const headers = ref([
   {title: 'car.make', key: 'make'},
   {title: 'car.model', key: 'model'},
@@ -86,19 +146,20 @@ const editDialogVisible = ref(false)
 const createDialogVisible = ref(false)
 const carId = ref<number|undefined>(undefined)
 
-async function loadItems({page, itemsPerPage, sortBy}: { page: number, itemsPerPage: number, sortBy: { key: string, order: 'asc'|'desc'}[] }) {
+await loadItems({page: 1, itemsPerPage: itemsPerPage.value, sortBy: []})
+
+async function loadItems({page, itemsPerPage, sortBy}: DatatablesOptions) {
   loading.value = true
   const query = {
-    perPage: itemsPerPage,
+    perPage: -1,
     page,
-    sortBy: sortBy[0]?.key,
-    sortDirection: sortBy[0]?.order,
+    sortBy: sortBy?.length ? sortBy[0].key : null,
+    sortDirection: sortBy?.length ? sortBy[0].order : null,
   }
 
   const { data }  = await backFetch<PaginatedResponse<Car>>('/user/my-cars', {
     method: 'get',
     query,
-    headers: {'Accept': 'application/json'},
   })
 
   serverItems.value = data.value?.data || []

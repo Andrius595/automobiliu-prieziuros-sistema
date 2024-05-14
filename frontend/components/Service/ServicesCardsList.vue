@@ -90,13 +90,6 @@
                 @click="nextPage"
             ></v-btn>
           </div>
-<!--          <template v-slot:footer>
-          <v-pagination
-              :v-model="page"
-              :length="Math.ceil(totalItems/itemsPerPage)"
-              @input="loadItems({page, itemsPerPage, sortBy: []})"
-          ></v-pagination>
-        </template>-->
         </template>
       </v-data-iterator>
     </v-card>
