@@ -10,6 +10,12 @@
         item-value="id"
         @update:options="loadItems"
     >
+      <template #top>
+        <div class="pa-2 d-flex justify-space-between align-center bg-secondary">
+          <h2>{{ $t('navigation.services.active_appointments') }}</h2>
+        </div>
+        <v-divider />
+      </template>
       <template v-slot:headers="{ columns, isSorted, getSortIcon, toggleSort }">
         <tr>
           <template v-for="column in columns" :key="column.key">
