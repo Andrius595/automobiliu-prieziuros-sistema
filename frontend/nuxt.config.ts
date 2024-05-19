@@ -20,6 +20,10 @@ export default defineNuxtConfig({
   i18n: {
     locales: ['en', 'lt'],
     defaultLocale: 'lt',
+    langDir:
+        typeof window === 'undefined'
+            ? require('path').resolve('./lang')
+            : '/lang',
   },
   pwa: {},
   runtimeConfig: {
