@@ -20,7 +20,7 @@ export default defineNuxtConfig({
   i18n: {
     locales: ['en', 'lt'],
     defaultLocale: 'lt',
-    langDir: './lang',
+    vueI18n: './I18n.config.ts',
   },
   pwa: {},
   runtimeConfig: {
