@@ -12,8 +12,8 @@
     >
       <template v-slot:top>
         <div class="pa-2 d-flex justify-space-between align-center bg-secondary">
-          <h2>Cars list</h2>
-          <v-btn color="primary" @click="createItem">Create car</v-btn>
+          <h2>{{ $t('navigation.cars_list') }}</h2>
+          <v-btn color="primary" @click="createItem">{{ $t('car.create_car') }}</v-btn>
         </div>
         <v-divider />
       </template>
@@ -54,13 +54,15 @@ import EditCarDialog from "~/components/Car/Dialogs/EditCarDialog.vue";
 import CreateCarDialog from "~/components/Car/Dialogs/CreateCarDialog.vue";
 import type {Car} from "~/types/Car";
 
+const { t } = useI18n()
+
 const itemsPerPage = ref(5)
 const headers = ref([
-  {title: 'Make', key: 'make'},
-  {title: 'Model', key: 'model'},
-  {title: 'Vin', key: 'vin'},
-  {title: 'Owner', key: 'owner'},
-  {title: 'Actions', key: 'actions', sortable: false, align: 'end' },
+  {title: t('car.make'), key: 'make'},
+  {title: t('car.model'), key: 'model'},
+  {title: t('car.vin'), key: 'vin'},
+  {title: t('car.owner'), key: 'owner'},
+  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end' },
 ])
 const totalItems = ref(0)
 const serverItems = ref<Car[]>([])

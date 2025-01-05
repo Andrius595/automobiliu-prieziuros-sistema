@@ -16,7 +16,6 @@ await fetchCarInformation(carId)
 async function fetchCarInformation(carId: number) {
   const { data } = await backFetch<Car>('/cars/'+carId, {
     method: 'get',
-    headers: {'Accept': 'application/json'},
   })
   if (data.value) {
     car.value = data.value
@@ -26,12 +25,13 @@ async function fetchCarInformation(carId: number) {
 
 <template>
   <v-container v-if="carId" fluid>
-    <div class="d-flex justify-space-between">
+    <div class="d-flex justify-space-between flex-wrap">
       <h2>{{ car.make }} {{ car.model }}</h2>
       <v-tabs
           v-model="tab"
           align-tabs="end"
           color="deep-purple"
+          show-arrows
       >
         <v-tab :value="1">{{ $t('car.general_information') }}</v-tab>
         <v-tab :value="2">{{ $t('car.history') }}</v-tab>

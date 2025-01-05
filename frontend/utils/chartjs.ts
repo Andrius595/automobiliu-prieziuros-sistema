@@ -118,10 +118,40 @@ export const externalTooltipHandler = (context) => {
 
     const {offsetLeft: positionX, offsetTop: positionY} = chart.canvas;
 
-    // Display, position, and set styles for font
+    // Calculate position of tooltip relative to chart's canvas
+    const tooltipX = positionX + tooltip.caretX;
+
+// Determine if tooltip is in first half or second half horizontally
+    const isTooltipInFirstHalf = tooltipX < (document.body.clientWidth / 2);
+
+    console.log(positionX, tooltip.caretX, document.body.clientWidth / 2, isTooltipInFirstHalf)
+// Calculate position adjustment for X axis (similar to previous logic)
+
+
+// Calculate position adjustment for Y axis (similar to previous logic)
+    let adjustedY = positionY + tooltip.caretY;
+    const tooltipWidth = tooltipEl.offsetWidth;
+    const tooltipHeight = tooltipEl.offsetHeight;
+    const documentWidth = document.body.clientWidth;
+    const windowHeight = window.innerHeight;
+
+    if (adjustedY + tooltipHeight > windowHeight) {
+        adjustedY = positionY + tooltip.caretY - tooltipHeight;
+    }
+
+// Adjust X position if tooltip goes beyond right or left edge
+    let adjustedX;
+    if (!isTooltipInFirstHalf) {
+        adjustedX = positionX + tooltip.caretX - tooltipWidth/3;
+    } else {
+        adjustedX = positionX + tooltip.caretX + tooltipWidth/3;
+    }
+
+// Display tooltip
     tooltipEl.style.opacity = 1;
-    tooltipEl.style.left = positionX + tooltip.caretX + 'px';
-    tooltipEl.style.top = positionY + tooltip.caretY + 'px';
+    tooltipEl.style.left = adjustedX + 'px';
+    tooltipEl.style.top = adjustedY + 'px';
     tooltipEl.style.font = tooltip.options.bodyFont.string;
     tooltipEl.style.padding = tooltip.options.padding + 'px ' + tooltip.options.padding + 'px';
+
 };

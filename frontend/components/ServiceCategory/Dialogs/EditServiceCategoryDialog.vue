@@ -69,7 +69,7 @@ async function confirmEdit() {
 <template>
   <v-dialog :model-value="visible" max-width="700px" @update:model-value="(value) => emit('update:visible', value)">
     <v-card>
-      <v-card-title class="headline">Edit car</v-card-title>
+      <v-card-title class="headline">{{ $t('service_category.edit_service_category') }}</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>

@@ -8,7 +8,7 @@ const user: UserSession = await auth.getUser()
 const serviceId = user.service_id as number
 
 definePageMeta({
-  middleware: ['auth', 'service-admin'],
+  middleware: ['auth', 'service-admin-or-system-admin'],
 })
 </script>
 

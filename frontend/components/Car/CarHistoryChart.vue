@@ -8,6 +8,13 @@ const props = defineProps({
     required: true,
   },
 })
+const lineChart = ref()
+
+const isMobile = computed(() => document.body.clientWidth < 600)
+
+onMounted(() => {
+  console.log(lineChart.value.chart)
+})
 
 const options = {
   responsive: true,
@@ -16,6 +23,24 @@ const options = {
   parsing: {
     xAxisKey: 'completed_at',
     yAxisKey: 'current_mileage'
+  },
+  scales: {
+    x: {
+      ticks: {
+        callback: function(value, index, values) {
+          var newthis = this as any;
+          var label = newthis.getLabelForValue(value);
+          var parts = label.split(' ');
+          let text = parts[0]
+          if (!isMobile.value) {
+            text += ' ' + parts[1]
+          }
+          return text; // Splits the date-time string into separate lines
+        },
+        maxRotation: () => isMobile.value ? 90 : 0,
+        minRotation: () => isMobile.value ? 90 : 0,
+      }
+    }
   },
   plugins: {
     tooltip: {
@@ -49,7 +74,7 @@ const data2 = computed(() => {
 <template>
 <v-container>
   <div>
-    <Line :data="data2" :options="options" />
+    <Line :data="data2" :options="options" ref="lineChart" />
   </div>
 
 </v-container>

@@ -42,6 +42,11 @@ const lt = {
         history_shared_and_copied: 'Istorija sėkmingai pasidalinta ir nukopijuota į iškarpinę',
         registration_document_number: 'Registracijos liudijimo numeris',
         register: 'Registruoti',
+        create_car: 'Sukurti automobilį',
+        public_history_url_deleted: 'Vieša istorijos nuoroda ištrinta',
+        edit_car: 'Redaguoti automobilį',
+        change_photo: 'Pakeisti nuotrauką',
+        wrong_public_url: 'Neteisinga vieša nuoroda',
     },
     service: {
         registrations: {
@@ -64,6 +69,12 @@ const lt = {
         information_updated_successfully: 'Informacija sėkmingai atnaujinta',
         create_service: 'Sukurti servisą',
         no_reviews: 'Nėra atsiliepimų',
+        image: 'Logotipas',
+        address: 'Adresas',
+        city: 'Miestas',
+        phone: 'Telefonas',
+        email: 'El. paštas',
+        service_categories: 'Aptarnavimo kategorijos',
     },
     record: {
         short_description: 'Trumpas aprašymas',
@@ -83,6 +94,11 @@ const lt = {
         completed_at: 'Užbaigta',
         transaction_check_string: 'Transakcijos tikrinimo eilutė',
         leave_review: 'Palikti atsiliepimą',
+        create_appointment: 'Sukurti vizitą',
+        check_vin: 'Patikrinti VIN',
+        vin_check_car_not_registered_message: 'Automobilis nėra registruotas sistemoje. Norėdami tęsti, įveskite automobilio duomenis.',
+        vin_check_car_is_registered_message: 'Automobilis registruotas sistemoje. Galite įvesti dabartinį automobilio kilometražą (galėsite jį patikslinti užbaigiant vizitą).',
+
     },
     reminder: {
         reminders: 'Priminimai',
@@ -156,6 +172,7 @@ const lt = {
         share: 'Dalintis',
         create: 'Sukurti',
         search: 'Ieškoti',
+        change: 'Pakeisti',
     },
     auth: {
         login: 'Prisijungti',

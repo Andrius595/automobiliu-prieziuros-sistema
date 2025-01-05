@@ -15,7 +15,7 @@ class CreateNewCar extends CreatesNewRecord
 
         $car = Car::create($input);
 
-        if ($input['owner_id']) {
+        if ($input['owner_id'] ?? null) {
             $car->users()->attach($input['owner_id']);
         }
 

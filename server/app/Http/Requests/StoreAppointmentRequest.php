@@ -14,7 +14,7 @@ class StoreAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'car_id' => ['required', 'exists:cars,id'],
+            'car_id' => ['nullable', 'exists:cars,id'],
             'current_mileage' => ['required', 'numeric'],
             'mileage_type' => ['required', 'boolean'],
         ];

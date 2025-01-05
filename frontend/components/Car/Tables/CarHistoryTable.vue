@@ -4,19 +4,22 @@
         :headers="headers"
         :items="items"
         class="elevation-1"
+        :mobile="null"
+        mobile-breakpoint="md"
+        disable-sort
     >
       <template v-slot:item.current_mileage="{ item }">
         <span>{{ item.current_mileage}} {{ item.mileage_type ? 'm' : 'km'}}</span>
       </template>
       <template v-slot:item.records_short_description="{ item }">
-        <ol>
+        <ol class="ml-2">
           <li v-for="record in item.records">
             {{ record.short_description }}
           </li>
         </ol>
       </template>
       <template v-slot:item.records_full_description="{ item }">
-        <ol>
+        <ol class="ml-2">
           <li v-for="record in item.records">
             {{ record.description || '-' }}
           </li>
@@ -80,16 +83,24 @@ const actionItemId = ref<number>()
 
 const items = ref([...props.appointments])
 
-const headers = ref([
-  {title: t('service.service_title'), key: 'service.title', sortable: false},
-  {title: t('appointment.current_mileage'), key: 'current_mileage', sortable: false},
-  {title: t('appointment.completed_at'), key: 'completed_at', sortable: false},
-  {title: t('appointment.records'), key: 'records_short_description', sortable: false},
-  {title: t('appointment.records_full_description'), key: 'records_full_description', sortable: false},
-  {title: t('appointment.blockchain_transaction'), key: 'transaction_hash', sortable: false},
-  {title: t('appointment.transaction_check_string'), key: 'transaction_check_string', sortable: false},
-  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end' },
-])
+
+const headers = computed(function() {
+  let columns = [
+    {title: t('service.service_title'), key: 'service.title', sortable: false, mobile: true},
+    {title: t('appointment.current_mileage'), key: 'current_mileage', sortable: false, mobile: false},
+    {title: t('appointment.completed_at'), key: 'completed_at', sortable: false},
+    {title: t('appointment.records'), key: 'records_short_description', sortable: false},
+    {title: t('appointment.records_full_description'), key: 'records_full_description', sortable: false},
+    {title: t('appointment.blockchain_transaction'), key: 'transaction_hash', sortable: false},
+    {title: t('appointment.transaction_check_string'), key: 'transaction_check_string', sortable: false},
+  ]
+
+  if (!props.isPublic) {
+    columns.push({title: t('tables.actions'), key: 'actions', sortable: false, align: 'end' })
+  }
+
+  return columns;
+})
 
 function generateCheckHashString(appointment: Appointment & {records: Record[], car: Car}) {
   const countRecords = appointment.records.length;
@@ -131,5 +142,7 @@ function closeReviewDialog() {
 </script>
 
 <style scoped>
-
+:deep(.v-data-table-headers--mobile) {
+  display: none;
+}
 </style>

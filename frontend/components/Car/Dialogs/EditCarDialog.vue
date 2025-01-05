@@ -42,7 +42,6 @@ function closeDialog() {
 async function loadCar(carId: number) {
   const { data } = await backFetch<Car>('/cars/'+props.carId, {
     method: 'get',
-    headers: {'Accept': 'application/json'},
   })
   if (data.value) {
     car.value = data.value
@@ -67,15 +66,15 @@ async function confirmEdit() {
 <template>
   <v-dialog :model-value="visible" max-width="700px" @update:model-value="(value) => emit('update:visible', value)">
     <v-card>
-      <v-card-title class="headline">Edit car</v-card-title>
+      <v-card-title class="headline">{{ $t('car.edit_car') }}</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>
             <v-col cols="12" md="6">
-              <v-text-field label="Make" v-model="car.make" :error-messages="errors.make" />
+              <v-text-field :label="$t('car.make')" v-model="car.make" :error-messages="errors.make" />
             </v-col>
             <v-col cols="12" md="6">
-              <v-text-field label="Model" v-model="car.model" :error-messages="errors.make" />
+              <v-text-field :label="$t('car.model')" v-model="car.model" :error-messages="errors.make" />
             </v-col>
             <v-col cols="12" md="6">
               <v-text-field :label="$t('car.plate_no')" v-model="car.plate_no" :error-messages="errors.plate_no" />

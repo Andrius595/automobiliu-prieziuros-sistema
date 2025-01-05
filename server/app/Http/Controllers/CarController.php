@@ -57,7 +57,9 @@ class CarController extends Controller
 
     public function update(UpdateCarRequest $request, Car $car, UpdateCar $updateCar): JsonResponse
     {
-        $updateCar->update($car, $request->validated());
+        $data = $request->validated();
+        $data['image'] = $request->file('image');
+        $updateCar->update($car, $data);
 
         return response()->json($car);
     }

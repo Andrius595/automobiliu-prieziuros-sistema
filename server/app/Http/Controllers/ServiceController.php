@@ -73,6 +73,7 @@ class ServiceController extends Controller
 
     public function show(Service $service): JsonResponse
     {
+        $service->load(['service_categories', 'city']);
         $service->service_categories_ids = $service->service_categories()->pluck('service_categories.id');
 
         return response()->json($service);

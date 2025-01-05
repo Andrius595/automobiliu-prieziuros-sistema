@@ -9,12 +9,23 @@ use App\Http\Requests\StoreServiceCategoryRequest;
 use App\Http\Requests\UpdateServiceCategoryRequest;
 use App\Models\ServiceCategory;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class ServiceCategoryController extends Controller
 {
-    public function index(ListServiceCategories $listServiceCategories): JsonResponse
+    public function index(Request $request, ListServiceCategories $listServiceCategories): JsonResponse
     {
-        return response()->json($listServiceCategories->list());
+        $perPage = $request->input('perPage', 10);
+        $searchParams = $request->only([
+            'make',
+            'model',
+            'vin'
+        ]);
+        $sortParams = $request->only([
+            'sortBy',
+            'sortDirection',
+        ]);
+        return response()->json($listServiceCategories->list($searchParams, $perPage, $sortParams));
     }
 
     public function indexForSelect(): JsonResponse

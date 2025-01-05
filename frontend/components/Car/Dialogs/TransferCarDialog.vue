@@ -44,7 +44,7 @@ function confirmTransfer() {
 <template>
 <v-dialog :model-value="visible" max-width="500px" @update:model-value="(value) => emit('update:visible', value)">
   <v-card>
-    <v-card-title class="headline">{{ $t('car.share_car') }}</v-card-title>
+    <v-card-title class="headline">{{ $t('car.transfer_car') }}</v-card-title>
     <v-card-text>
       <v-row>
         <v-col>

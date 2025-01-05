@@ -126,7 +126,7 @@ async function loadItems({page, itemsPerPage, sortBy}: DatatablesOptions) {
     sortDirection: sortBy?.length ? sortBy[0].order : null,
   }
 
-  const { data }  = await backFetch<PaginatedResponse<Service>>('/services/', {
+  const { data }  = await backFetch<PaginatedResponse<Service>>('/services', {
     method: 'get',
     query,
     headers: {'Accept': 'application/json'},

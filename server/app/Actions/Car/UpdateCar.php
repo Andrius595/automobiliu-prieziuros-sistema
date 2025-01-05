@@ -4,6 +4,7 @@ namespace App\Actions\Car;
 
 use App\Actions\UpdatesRecord;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class UpdateCar extends UpdatesRecord
@@ -12,6 +13,16 @@ class UpdateCar extends UpdatesRecord
     {
         if (isset($data['owner_id']) && $record->owner_id !== $data['owner_id']) {
             $data['owner_confirmed_at'] = null;
+        }
+
+        if (isset($data['image']) && $data['image']) {
+            $path = Storage::putFile("public/cars/$record->id/photo", $data['image']);
+            if ($path) {
+                if ($record->logo_path) {
+                    Storage::delete($record->logo_path);
+                }
+                $data['logo_path'] = $path;
+            }
         }
 
         return parent::update($record, $data);

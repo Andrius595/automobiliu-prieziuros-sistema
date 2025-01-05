@@ -33,6 +33,7 @@ class UpdateCarRequest extends FormRequest
             'color' => ['sometimes', 'string', 'max:255'],
             'owner_id' => ['sometimes', 'nullable', 'integer', 'exists:users,id'],
             'owner_confirmed_at' => ['sometimes', 'nullable', 'date'],
+            'image.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'],
         ];
     }
 }

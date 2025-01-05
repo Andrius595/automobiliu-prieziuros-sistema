@@ -21,12 +21,6 @@
         <v-text-field v-model="service.address" :label="$t('service.address')" :error-messages="errors.address" required></v-text-field>
       </v-col>
       <v-col cols="12" md="6">
-        <v-text-field v-model="service.phone" :label="$t('service.phone')" :error-messages="errors.phone" required></v-text-field>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field v-model="service.email" :label="$t('service.email')" :error-messages="errors.email" required></v-text-field>
-      </v-col>
-      <v-col cols="12" md="6">
         <v-select v-model="service.city_id" :items="cities" item-title="name" item-value="id" :label="$t('service.city')" :error-messages="errors.city_id" required></v-select>
       </v-col>
       <v-col cols="12" md="6">
@@ -125,6 +119,6 @@ async function fetchServiceCategories() {
 }
 
 definePageMeta({
-  middleware: ['auth', 'service-admin']
+  middleware: ['auth', 'service-admin-or-system-admin']
 })
 </script>

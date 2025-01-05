@@ -13,4 +13,5 @@ export type Car = {
     year_of_manufacture: number|null;
     created_at: string|null;
     updated_at: string|null;
+    logo_path: string|null;
 }

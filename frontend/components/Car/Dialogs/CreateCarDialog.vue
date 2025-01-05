@@ -81,7 +81,7 @@ async function loadOwners() {
 <template>
   <v-dialog :model-value="visible" max-width="700px" @update:model-value="(value) => emit('update:visible', value)">
     <v-card>
-      <v-card-title class="headline">Edit car</v-card-title>
+      <v-card-title class="headline">{{ $t('car.create_car') }}</v-card-title>
       <v-card-text>
         <v-container>
           <v-row>

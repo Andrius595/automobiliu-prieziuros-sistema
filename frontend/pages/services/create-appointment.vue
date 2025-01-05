@@ -1,73 +1,98 @@
 <template>
   <v-container>
-    <h1>Create appointment</h1>
+    <h1>{{ $t('appointment.create_appointment') }}</h1>
     <v-row>
       <v-col cols="12">
         <v-text-field
             v-model="vin"
-            label="VIN number"
+            :label="$t('car.vin')"
             required
             hide-details
         ></v-text-field>
       </v-col>
     </v-row>
-    <v-btn color="primary" class="mt-4" @click="checkVin">Check VIN</v-btn>
+    <v-btn color="primary" class="mt-4" @click="checkVin">{{ $t('appointment.check_vin') }}</v-btn>
     <template v-if="checkPerformed">
-    <v-divider class="my-4" />
-    <v-row >
-      <v-col cols="12">
-        <v-alert type="success" v-if="carWasFound">Car was found in the system. Please, make sure data below is correct.</v-alert>
-        <v-alert type="error" v-else>Car is not registered in the system. Please, enter it's make and model manually.</v-alert>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
-            v-model="form.make"
-            :label="$t('car.make')"
-            required
-            hide-details
-            :disabled="carWasFound"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
-            v-model="form.model"
-            :label="$t('car.model')"
-            required
-            hide-details
-            :disabled="carWasFound"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
-            v-model="form.plate_no"
-            :label="$t('car.plate_no')"
-            required
-            hide-details
-            :disabled="carWasFound"
-        ></v-text-field>
+      <v-divider class="my-4" />
+      <v-row >
+        <v-col cols="12">
+          <v-alert type="success" v-if="carWasFound">{{ $t('appointment.vin_check_car_is_registered_message') }}</v-alert>
+          <v-alert type="error" v-else>{{ $t('appointment.vin_check_car_not_registered_message') }}</v-alert>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="form.make"
+              :label="$t('car.make')"
+              required
+              hide-details
+              :disabled="carWasFound"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="6">
+          <v-text-field
+              v-model="form.model"
+              :label="$t('car.model')"
+              required
+              hide-details
+              :disabled="carWasFound"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+              v-model="form.plate_no"
+              :label="$t('car.plate_no')"
+              required
+              hide-details
+              :disabled="carWasFound"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-menu
+              v-model="menu"
+              :close-on-content-click="false"
+              location="bottom"
+          >
+            <template v-slot:activator="{ props }">
+              <v-text-field v-bind="props" :label="$t('car.year_of_manufacture')" v-model="form.year_of_manufacture" :disabled="carWasFound" />
+            </template>
 
+            <v-card min-width="300">
+              <v-date-picker-years v-model="form.year_of_manufacture" min="1980" max="2024"></v-date-picker-years>
 
-      </v-col>
-      <v-col cols="12" md="6">
-        <v-text-field
-            v-model="form.current_mileage"
-            :label="$t('car.current_mileage')"
-            required
-            hide-details
-        >
-          <template #append-inner>
-            <v-btn-toggle
-                v-model="form.mileage_type"
-                mandatory
-            >
-              <v-btn>KM</v-btn>
-              <v-btn>M</v-btn>
-            </v-btn-toggle>
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
-    <v-btn color="primary" class="mt-4" @click="createAppointment">Create appointment</v-btn>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    color="primary"
+                    variant="text"
+                    @click="menu = false"
+                >
+                  {{ $t('common.save') }}
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-menu>
+        </v-col>
+        <v-col cols="12" md="4">
+          <v-text-field
+              v-model="form.current_mileage"
+              :label="$t('car.current_mileage')"
+              required
+              hide-details
+          >
+            <template #append-inner>
+              <v-btn-toggle
+                  v-model="form.mileage_type"
+                  mandatory
+              >
+                <v-btn>KM</v-btn>
+                <v-btn>M</v-btn>
+              </v-btn-toggle>
+            </template>
+          </v-text-field>
+        </v-col>
+      </v-row>
+      <v-btn color="success" class="mt-4" @click="createAppointment">{{ $t('common.create') }}</v-btn>
     </template>
 
 
@@ -89,11 +114,13 @@ const form = ref({
   model: '',
   plate_no: '',
   current_mileage: 0,
+  year_of_manufacture: 2024,
   mileage_type: 0,
 })
 const checkPerformed = ref<boolean>(false)
 const carWasFound = ref<boolean>(false)
 const carId = ref<number|null>(null)
+const menu = ref(false)
 
 function resetSearch() {
   form.value.make = ''

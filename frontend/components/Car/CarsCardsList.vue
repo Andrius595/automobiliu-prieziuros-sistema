@@ -11,22 +11,23 @@
           :loading="loading"
       >
         <template v-slot:header>
-          <v-toolbar color="secondary" class="px-2">
-            <div class="d-flex justify-space-between w-100 align-center">
-              <h2>{{ $t('navigation.cars_list') }}</h2>
+          <div class="bg-secondary pa-4">
+            <div class="d-flex justify-space-between w-100 align-center flex-wrap">
+              <h2 class="text-no-wrap">{{ $t('navigation.cars_list') }}</h2>
               <v-text-field
                   v-model="search"
                   density="comfortable"
                   :placeholder="$t('common.search')"
                   prepend-inner-icon="mdi-magnify"
-                  style="max-width: 300px;"
+                  style="max-width: 300px; min-width: 200px;"
                   variant="solo"
                   clearable
                   hide-details
+                  class="min-w-20"
               ></v-text-field>
             </div>
 
-          </v-toolbar>
+          </div>
         </template>
 
         <template v-slot:default="{ items }">
@@ -39,7 +40,7 @@
                   md="4"
               >
                 <v-card class="d-flex flex-column pb-3 flex-grow-1 h-100"  border flat>
-                  <v-img style="max-height: 150px" :src="imageUrl('')"></v-img>
+                  <v-img style="max-height: 150px" :src="imageUrl(item.raw.logo_path)"></v-img>
 
                   <v-list-item :subtitle="item.raw.vin" class="mb-2">
                     <template v-slot:title>
@@ -53,15 +54,6 @@
                   <div class="d-flex px-4 mt-auto align-center align-stretch">
                     <v-btn color="primary" class="flex-grow-1" :to="'/cars/'+item.raw.id">
                       Peržiūrėti
-                    </v-btn>
-                    <v-btn color="secondary" size="custom" class="px-3 ml-2">
-                      <v-icon
-                          color="white"
-                          small
-                          @click="editItem(item.id)"
-                      >
-                        mdi-pencil
-                      </v-icon>
                     </v-btn>
                     <v-btn color="error" size="custom" class="px-3 ml-2">
                       <v-icon

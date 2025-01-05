@@ -1,6 +1,7 @@
 import {
     Chart as ChartJS,
-    registerables
+    registerables,
+
 } from 'chart.js'
 import { Line } from 'vue-chartjs'
 

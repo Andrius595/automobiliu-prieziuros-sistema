@@ -69,8 +69,11 @@ class DemonstrationSeeder extends Seeder
             'title' => 'Greitųjų Ratų Remontas',
             'address' => 'Taikos pr. 1',
             'city_id' => $kaunas->id,
+            'logo_path' => 'public/services/1/logo/QH3dBDKTmLdUGhmLiZumsONSVlTmsJDdjUXMLK2l.png',
             'description' => 'Specializuojamės greito ir efektyvaus automobilių ratų remonto paslaugose. Su mūsų profesionalia komanda jūsų automobilio ratų bėdos bus išspręstos greitai ir patikimai.',
         ]);
+
+        $service->categories()->attach([8,9,6,3]);
 
         $clientUser = User::factory()->create([
             'first_name' => 'Jonas',
@@ -170,6 +173,37 @@ class DemonstrationSeeder extends Seeder
             'description' => 'Pakeistas priekinis stiklas ir sutrūkinėjusios senos gumos aplink stiklą.',
         ]);
 
+        $appointment4 = Appointment::create([
+            'car_id' => $clientCar1->id,
+            'service_id' => $service->id,
+            'confirmed_at' => Carbon::parse('2024-05-02 10:14:11'),
+            'completed_at' => Carbon::parse('2024-05-02 10:14:48'),
+            'transaction_hash' => '0x71702788a730a39ecf4e438f99311eed2280025bd3926f04b42fad5da68e5ec5',
+            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
+            'current_mileage' => 26000,
+        ]);
+
+        $record41 = Record::create([
+            'appointment_id' => $appointment4->id,
+            'short_description' => 'Padangu keitimas',
+            'description' => 'Pakeistos padangos, subalansuoti ratai.',
+        ]);
+
+        $appointment5 = Appointment::create([
+            'car_id' => $clientCar1->id,
+            'service_id' => $service->id,
+            'confirmed_at' => Carbon::parse('2024-05-01 18:48:11'),
+            'completed_at' => Carbon::parse('2024-05-01 18:49:33'),
+            'transaction_hash' => '0xa0287a15362b691f3128df0c86740579f0967ceeeb275367d41b1f947cb5b510',
+            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
+            'current_mileage' => 30000,
+        ]);
+
+        $record51 = Record::create([
+            'appointment_id' => $appointment5->id,
+            'short_description' => 'Padangu balansavimas',
+        ]);
+
         $clientCar2 = $clientUser->cars()->create([
             'make' => 'BMW',
             'model' => 'X5',
@@ -180,6 +214,22 @@ class DemonstrationSeeder extends Seeder
             'plate_no' => 'XYZ123',
             'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
             'registration_document' => 'B123123',
+        ]);
+
+        $appointment21 = Appointment::create([
+            'car_id' => $clientCar2->id,
+            'service_id' => $service->id,
+            'confirmed_at' => Carbon::parse('2024-05-01 17:49:53'),
+            'completed_at' => Carbon::parse('2024-05-01 17:53:22'),
+            'transaction_hash' => '0x487505f0fa7982866d60a1d1d7002ca79d25f849bf88e90a9f081e5064fc667a',
+            'mileage_type' => Car::MILEAGE_TYPE_KILOMETERS,
+            'current_mileage' => 1,
+        ]);
+
+        $record211 = Record::create([
+            'appointment_id' => $appointment21->id,
+            'short_description' => 'Padangų keitimas',
+            'description' => 'Pakeistos padangos, subalansuoti ratai.',
         ]);
     }
 }

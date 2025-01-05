@@ -2,9 +2,11 @@ import {useJWT} from "~/composables/useJWT";
 import {useRoles} from "~/composables/useRoles";
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
-    const { isServiceAdmin } = useRoles()
+    const { hasServiceAdminRole } = useRoles()
 
-    if (!isServiceAdmin.value) {
+    const isServiceAdmin = await hasServiceAdminRole()
+
+    if (!isServiceAdmin) {
         await navigateTo('/dashboard');
     }
 })

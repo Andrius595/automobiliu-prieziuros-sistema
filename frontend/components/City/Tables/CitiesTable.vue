@@ -59,7 +59,7 @@ const { t } = useI18n()
 const itemsPerPage = ref(5)
 const headers = ref([
   {title: t('city.name'), key: 'name'},
-  {title: 'Actions', key: 'actions', sortable: false, align: 'end' },
+  {title: t('tables.actions'), key: 'actions', sortable: false, align: 'end' },
 ])
 const totalItems = ref(0)
 const serverItems = ref<City[]>([])
