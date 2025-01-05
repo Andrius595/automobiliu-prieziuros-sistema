@@ -45,7 +45,7 @@ class ExchangeRatesMail extends Mailable
         return new Content(
             view: 'mails.exchange_rates',
             with: [
-                'message' => $m,
+                'rates' => $m,
             ]
         );
     }

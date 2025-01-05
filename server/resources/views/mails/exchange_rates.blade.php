@@ -1,1 +1,1 @@
-<div>{{ $message }}</div>
+<div>{{ $rates }}</div>
